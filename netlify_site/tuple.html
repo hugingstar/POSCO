@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>튜플 (Tuple) - 파이썬 데이터 구조</title>
+    <meta name="description" content="파이썬 튜플의 개념과 AI/자동화에서의 활용 이유">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>튜플 (Tuple)</h1>
+        
+        <h2>기본 개념</h2>
+        <p>튜플은 순서가 있지만 한 번 생성되면 <strong>수정이 불가능한(immutable)</strong> 데이터의 모음입니다. 소괄호 <code>()</code>를 사용하여 생성합니다.</p>
+        
+        <h2>AI 모델 및 자동화에서 사용하는 이유</h2>
+        <ul>
+            <li><strong>데이터 보호 및 안정성:</strong> 모델의 가중치 형태(Shape: 예 <code>(256, 256, 3)</code>)나 변경되면 치명적인 설정값을 저장할 때 사용하여, 코드 실행 도중 의도치 않은 수정을 방지합니다.</li>
+            <li><strong>다중 반환값 처리:</strong> 함수 하나에서 여러 개의 결과(예: 예측값, 오차율, 확률값)를 동시에 반환해야 할 때 파이썬은 내부적으로 튜플을 사용하여 효율적으로 묶어냅니다.</li>
+            <li><strong>딕셔너리 키 활용 (Hashable):</strong> 리스트와 달리 튜플은 해시 가능하므로, 딕셔너리의 키(Key)로 사용할 수 있습니다. 복잡한 다차원 좌표나 고정 속성을 맵핑할 때 유리합니다.</li>
+        </ul>
+        
+        <a href="index.html" class="back-btn">&larr; 메인으로 돌아가기</a>
+    </div>
+</body>
+</html>
