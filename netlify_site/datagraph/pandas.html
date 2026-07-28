@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pandas로 데이터 가공 - 껄무새 파이썬</title>
+    <meta name="description" content="Pandas 그룹화(Group by), 최적화 팁 및 포스코퓨처엠 실무 사례">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <style>
+        html { scroll-behavior: smooth; }
+        .example-img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 1rem auto;
+            display: block;
+        }
+        .toc {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            left: calc(50% + 420px);
+            width: 180px;
+            z-index: 1000;
+        }
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+            border-left: 2px solid #e2e8f0;
+        }
+        .toc ul li {
+            margin-bottom: 0.2rem;
+        }
+        .toc ul ul {
+            padding-left: 0;
+            margin-top: 0.2rem;
+            font-size: 0.9em;
+        }
+        .toc a {
+            display: block;
+            text-decoration: none;
+            color: #64748b;
+            padding: 0.2rem 0 0.2rem 1rem;
+            transition: all 0.2s ease;
+            border-left: 2px solid transparent;
+            margin-left: -2px;
+        }
+        .toc a:hover {
+            color: #334155;
+        }
+        .toc a.active {
+            color: #f97316;
+            font-weight: bold;
+            border-left-color: #f97316;
+        }
+        @media (max-width: 1250px) {
+            .toc {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="toc">
+        <ul>
+            <li><a href="#section1">1. 그룹화 (Group By)</a></li>
+            <li><a href="#section2">2. 데이터 최적화</a></li>
+            <li><a href="#section3">포스코 실무 사례</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <header class="text-center">
+            <h1>🐼 Pandas로 데이터 가공</h1>
+        </header>
+        
+        <h2 id="section1">1. 데이터 그룹화 (Group By & Count)</h2>
+        <p>"Pandas의 진정한 강력함은 엑셀의 피벗테이블처럼 데이터를 쉽게 묶어서 통계를 내는 <code>groupby</code> 기능에 있다무새!"</p>
+        
+        <ul>
+            <li><strong><code>df.groupby('기준컬럼')</code>:</strong> 특정 컬럼의 데이터를 기준으로 그룹을 묶어줍니다.</li>
+            <li><strong><code>.count()</code> / <code>.mean()</code> / <code>.sum()</code>:</strong> 그룹화된 데이터의 개수, 평균, 합계 등 통계량을 바로 계산합니다.</li>
+        </ul>
+        
+        <pre>
+<span style="color: #c678dd;">import</span> pandas <span style="color: #c678dd;">as</span> pd
+
+<span style="color: #7f848e; font-style: italic;"># 가상의 공정 불량 데이터 생성</span>
+data = {
+    <span style="color: #98c379;">'라인'</span>: [<span style="color: #98c379;">'A라인'</span>, <span style="color: #98c379;">'B라인'</span>, <span style="color: #98c379;">'A라인'</span>, <span style="color: #98c379;">'C라인'</span>, <span style="color: #98c379;">'B라인'</span>, <span style="color: #98c379;">'A라인'</span>],
+    <span style="color: #98c379;">'불량원인'</span>: [<span style="color: #98c379;">'온도이상'</span>, <span style="color: #98c379;">'압력초과'</span>, <span style="color: #98c379;">'온도이상'</span>, <span style="color: #98c379;">'진동'</span>, <span style="color: #98c379;">'진동'</span>, <span style="color: #98c379;">'온도이상'</span>]
+}
+df = pd.DataFrame(data)
+
+<span style="color: #7f848e; font-style: italic;"># 라인별 불량 발생 건수 집계</span>
+defect_counts = df.groupby(<span style="color: #98c379;">'라인'</span>)[<span style="color: #98c379;">'불량원인'</span>].count()
+<span style="color: #56b6c2;">print</span>(defect_counts)
+<span style="color: #7f848e; font-style: italic;"># 결과:
+# 라인
+# A라인    3
+# B라인    2
+# C라인    1</span>
+</pre>
+
+        <h2 id="section2">2. 대용량 데이터 메모리 최적화 팁 (float64 ➔ float32)</h2>
+        <p>프로젝트를 하다보면 수백만 건의 센서 데이터를 다루게 될 텐데, Pandas는 기본적으로 실수를 <code>float64</code>(64비트)로 저장한다무새. 너무 무겁다!</p>
+        <p>정밀한 소수점 아래 15자리까지 필요한 게 아니라면, <code>float32</code>로 낮춰주기만 해도 <strong>메모리 사용량을 절반</strong>으로 줄일 수 있어!</p>
+        <pre>
+<span style="color: #7f848e; font-style: italic;"># 기존 메모리 상태 (float64)</span>
+<span style="color: #56b6c2;">print</span>(df[<span style="color: #98c379;">'온도센서'</span>].dtype)  <span style="color: #7f848e; font-style: italic;"># 출력: float64</span>
+
+<span style="color: #7f848e; font-style: italic;"># 메모리 다이어트! float32로 변환</span>
+df[<span style="color: #98c379;">'온도센서'</span>] = df[<span style="color: #98c379;">'온도센서'</span>].astype(<span style="color: #98c379;">'float32'</span>)
+</pre>
+
+        <h2 id="section3">🤖 포스코퓨처엠 실무: 데이터 가공과 최적화 활용 사례</h2>
+        <p>배터리 소재 현장에서 Pandas는 방대한 공정 데이터를 떡 주무르듯 가공하는 최고의 무기입니다!</p>
+        
+        <ul>
+            <li>
+                <strong>(1) 데이터 분석 단계 - 그룹화를 통한 원료 공급사별 수율 분석:</strong>
+                <br>수만 개의 제품 생산 이력 데이터에서, "어느 공급사의 원료를 썼을 때 수율이 가장 높았지?"를 분석하려면 <code>groupby('원료공급사')['수율'].mean()</code> 단 한 줄이면 해결됩니다. 이를 통해 우수 공급사를 선정하고 원가 경쟁력을 높일 수 있습니다.
+                <img src="images/posco_pandas_analysis.png" alt="그룹화 수율 분석" class="example-img">
+            </li>
+            <li style="margin-top: 1rem;">
+                <strong>(2) AI 모델링 단계 - 센서 데이터 메모리 최적화(OOM 방지):</strong>
+                <br>공장 전체에 깔린 수천 개의 IoT 센서가 1초 단위로 쏟아내는 압력/온도 데이터는 엄청난 용량입니다. AI 딥러닝 모델 훈련 시 컴퓨터 메모리 부족(Out Of Memory) 현상을 막기 위해, Pandas를 이용해 모든 센서 데이터를 <code>float64</code>에서 <code>float32</code>로 다운캐스팅하여 메모리 용량을 50% 절감한 후 GPU에 올려 학습시킵니다.
+                <img src="images/posco_pandas_memory.png" alt="데이터 메모리 최적화" class="example-img">
+            </li>
+            <li style="margin-top: 1rem;">
+                <strong>(3) AI 운영 단계 - 실시간 그룹화 통계를 통한 이상 알림(Alert):</strong>
+                <br>공장이 가동 중일 때 실시간으로 들어오는 데이터를 1시간 단위로 그룹화(<code>groupby</code> 또는 <code>resample</code>)하여, 특정 라인의 진동 이상 감지 건수(<code>count</code>)가 임계치를 넘으면 대시보드에 알람을 띄웁니다. 이렇게 가공된 데이터 덕분에 엔지니어가 즉각 조치를 취할 수 있습니다.
+                <img src="images/posco_pandas_alert.png" alt="실시간 그룹화 알람" class="example-img">
+            </li>
+        </ul>
+        
+        <div class="text-center" style="margin-top: 3rem;">
+            <a href="index.html" class="back-btn">&larr; 목차로 돌아가기</a>
+        </div>
+    </div>
+    
+    <script>
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const headings = document.querySelectorAll('h2[id], h3[id]');
+            
+            headings.forEach(heading => {
+                const headingTop = heading.getBoundingClientRect().top;
+                if (headingTop < 150) {
+                    current = heading.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.toc a').forEach(a => {
+                a.classList.remove('active');
+                if (current && a.getAttribute('href') === '#' + current) {
+                    a.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
