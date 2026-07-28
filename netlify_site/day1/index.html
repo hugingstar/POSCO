@@ -23,13 +23,11 @@
         <script type="text/javascript">
             // 노드(목차 아이템) 설정
             var nodes = new vis.DataSet([
-                { id: 1, label: 'Day 1: 파이썬 기초', font: {size: 20, color: '#ffffff', bold: true}, color: {background: '#0ea5e9', border: '#0284c7'}, shape: 'box', margin: 15, borderWidth: 2, shadow: true },
-                { id: 2, label: '파이썬 함수 알아보기\n(Click!)', font: {size: 16, color: '#1e293b'}, color: {background: '#ffffff', border: '#cbd5e1'}, shape: 'box', margin: 15, borderWidth: 2, url: 'function.html', shadow: true }
+                { id: 1, label: 'Day 1: 파이썬 함수 알아보기\n(Click!)', font: {size: 20, color: '#ffffff', bold: true}, color: {background: '#0ea5e9', border: '#0284c7'}, shape: 'box', margin: 15, borderWidth: 2, shadow: true, url: 'function.html' }
             ]);
 
             // 간선(연결선) 설정
             var edges = new vis.DataSet([
-                { from: 1, to: 2, arrows: 'to', color: {color:'#94a3b8', highlight: '#0ea5e9'}, width: 2 }
             ]);
 
             // 네트워크 생성
