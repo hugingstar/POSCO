@@ -21,7 +21,7 @@
             position: fixed;
             top: 50%;
             transform: translateY(-50%);
-            left: calc(50% + 420px);
+            right: 30px;
             width: 180px;
             z-index: 1000;
         }
@@ -113,6 +113,28 @@ defect_counts = df.groupby(<span style="color: #98c379;">'라인'</span>)[<span 
 
 <span style="color: #7f848e; font-style: italic;"># 메모리 다이어트! float32로 변환</span>
 df[<span style="color: #98c379;">'온도센서'</span>] = df[<span style="color: #98c379;">'온도센서'</span>].astype(<span style="color: #98c379;">'float32'</span>)
+</pre>
+        <p>특히 <strong>CNN(합성곱 신경망)</strong> 같은 딥러닝 모델에 이미지를 넣을 때, 입력 데이터를 미리 <code>float32</code>로 맞춰주면 GPU 메모리 초과(OOM)를 방지하고 연산 속도를 대폭 끌어올릴 수 있어무새!</p>
+        <pre>
+<span style="color: #c678dd;">import</span> tensorflow <span style="color: #c678dd;">as</span> tf
+<span style="color: #c678dd;">from</span> tensorflow.keras <span style="color: #c678dd;">import</span> layers, models
+
+<span style="color: #7f848e; font-style: italic;"># 1. 원본 데이터 (예: float64 이미지 배열)</span>
+<span style="color: #7f848e; font-style: italic;"># images = np.random.rand(10000, 28, 28, 1)  # 매우 무거움</span>
+
+<span style="color: #7f848e; font-style: italic;"># 2. 모델 입력 전 float32로 강제 변환! (메모리 절반 감소)</span>
+images_float32 = images.astype(<span style="color: #98c379;">'float32'</span>) 
+
+<span style="color: #7f848e; font-style: italic;"># 3. 간단한 CNN 모델 생성 (기본적으로 float32 가중치를 사용함)</span>
+model = models.Sequential([
+    layers.Conv2D(<span style="color: #d19a66;">32</span>, (<span style="color: #d19a66;">3</span>, <span style="color: #d19a66;">3</span>), activation=<span style="color: #98c379;">'relu'</span>, input_shape=(<span style="color: #d19a66;">28</span>, <span style="color: #d19a66;">28</span>, <span style="color: #d19a66;">1</span>)),
+    layers.MaxPooling2D((<span style="color: #d19a66;">2</span>, <span style="color: #d19a66;">2</span>)),
+    layers.Flatten(),
+    layers.Dense(<span style="color: #d19a66;">10</span>, activation=<span style="color: #98c379;">'softmax'</span>)
+])
+
+<span style="color: #7f848e; font-style: italic;"># 가벼워진 데이터로 빠르고 안정적인 학습 진행</span>
+model.fit(images_float32, labels, epochs=<span style="color: #d19a66;">5</span>)
 </pre>
 
         <h2 id="section3">🤖 포스코퓨처엠 실무: 데이터 가공과 최적화 활용 사례</h2>

@@ -21,7 +21,7 @@
             position: fixed;
             top: 50%;
             transform: translateY(-50%);
-            left: calc(50% + 420px);
+            right: 30px;
             width: 180px;
             z-index: 1000;
         }
@@ -85,37 +85,37 @@
         <h2 id="section1">1. 다차원 배열 (N-Dimensional Array)</h2>
         <p>"Numpy의 핵심은 데이터를 격자 모양의 배열로 아주 빠르고 효율적으로 처리하는 거야 껄껄! 차원(Dimension)에 따라 부르는 이름이 다르다무새."</p>
         
-        <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0; text-align: left;">
+        <table style="width: 100%; table-layout: fixed; border-collapse: collapse; margin: 1.5rem 0; text-align: left; word-break: break-all;">
             <thead>
                 <tr style="border-bottom: 2px solid #e2e8f0; background: #f8fafc;">
-                    <th style="padding: 0.75rem;">차원 (Dimension)</th>
-                    <th style="padding: 0.75rem;">이름</th>
-                    <th style="padding: 0.75rem;">예시</th>
-                    <th style="padding: 0.75rem;">파이썬 코드</th>
+                    <th style="padding: 0.75rem; width: 18%;">차원 (Dimension)</th>
+                    <th style="padding: 0.75rem; width: 22%;">이름</th>
+                    <th style="padding: 0.75rem; width: 25%;">예시</th>
+                    <th style="padding: 0.75rem; width: 35%;">파이썬 코드</th>
                 </tr>
             </thead>
             <tbody>
                 <tr style="border-bottom: 1px solid #e2e8f0;">
-                    <td style="padding: 0.75rem; font-weight: bold;">0D (Scalar)</td>
-                    <td style="padding: 0.75rem;">단일 값 (점)</td>
+                    <td style="padding: 0.75rem; font-weight: bold; word-break: keep-all;">0D (Scalar)</td>
+                    <td style="padding: 0.75rem; word-break: keep-all;">단일 값 (점)</td>
                     <td style="padding: 0.75rem;"><code>5</code></td>
                     <td style="padding: 0.75rem;"><code>np.array(5)</code></td>
                 </tr>
                 <tr style="border-bottom: 1px solid #e2e8f0;">
-                    <td style="padding: 0.75rem; font-weight: bold;">1D (Vector)</td>
-                    <td style="padding: 0.75rem;">선 형태 (1줄)</td>
+                    <td style="padding: 0.75rem; font-weight: bold; word-break: keep-all;">1D (Vector)</td>
+                    <td style="padding: 0.75rem; word-break: keep-all;">선 형태 (1줄)</td>
                     <td style="padding: 0.75rem;"><code>[1, 2, 3]</code></td>
                     <td style="padding: 0.75rem;"><code>np.array([1, 2, 3])</code></td>
                 </tr>
                 <tr style="border-bottom: 1px solid #e2e8f0;">
-                    <td style="padding: 0.75rem; font-weight: bold;">2D (Matrix)</td>
-                    <td style="padding: 0.75rem;">면 형태 (행/열 표)</td>
+                    <td style="padding: 0.75rem; font-weight: bold; word-break: keep-all;">2D (Matrix)</td>
+                    <td style="padding: 0.75rem; word-break: keep-all;">면 형태 (행/열 표)</td>
                     <td style="padding: 0.75rem;"><code>[[1, 2], [3, 4]]</code></td>
                     <td style="padding: 0.75rem;"><code>np.array([[1, 2], [3, 4]])</code></td>
                 </tr>
                 <tr style="border-bottom: 1px solid #e2e8f0;">
-                    <td style="padding: 0.75rem; font-weight: bold;">3D (Tensor)</td>
-                    <td style="padding: 0.75rem;">입체 형태 (큐브)</td>
+                    <td style="padding: 0.75rem; font-weight: bold; word-break: keep-all;">3D (Tensor)</td>
+                    <td style="padding: 0.75rem; word-break: keep-all;">입체 형태 (큐브)</td>
                     <td style="padding: 0.75rem;"><code>[[[1, 2]], [[3, 4]]]</code></td>
                     <td style="padding: 0.75rem;"><code>np.array([[[1, 2]], [[3, 4]]])</code></td>
                 </tr>
