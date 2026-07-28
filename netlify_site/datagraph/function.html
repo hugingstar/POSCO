@@ -27,20 +27,20 @@
         </header>
         
         <h2 id="section1">1. 기본 개념</h2>
-        <p>"함수는 자주 쓰는 코드를 하나의 상자에 담아두고 필요할 때마다 꺼내 쓰는 마법 같은 도구야 껄껄! 파이썬에서는 <code>def</code> 키워드를 사용해서 만든다무새."</p>
+        <p>"함수는 자주 쓰는 코드를 하나의 상자에 담아두고 필요할 때마다 꺼내 쓰는 도구입니다! 파이썬에서는 <code>def</code> 키워드를 사용해서 만듭니다."</p>
         
         <h2 id="section2">2. 입력(Input)과 출력(Output)</h2>
         <ul>
-            <li><strong>입력 파라미터 (매개변수):</strong> 함수가 일하기 위해 외부에서 받아오는 재료야. 괄호 <code>()</code> 안에 변수 이름으로 적어줘!</li>
-            <li><strong>출력 파라미터 (리턴값):</strong> 함수가 일을 다 끝내고 우리에게 돌려주는 결과물이지. <code>return</code> 키워드를 써서 내보낸다무새!</li>
+            <li><strong>입력 파라미터 (매개변수):</strong> 함수가 일하기 위해 외부에서 받아오는 재료입니다. 괄호 <code>()</code> 안에 변수 이름으로 적어주세요.</li>
+            <li><strong>출력 파라미터 (리턴값):</strong> 함수가 일을 다 끝내고 우리에게 돌려주는 결과물입니다. <code>return</code> 키워드를 써서 내보냅니다.</li>
         </ul>
 
         <h2 id="section3">3. 타입 지정 (Type Hinting)</h2>
-        <p>요즘 파이썬에서는 입력과 출력의 <strong>형태(타입)를 미리 적어주는(Type Hint)</strong> 것이 대세야! 코드를 읽기도 편해지고, AI 자동완성이나 에러 방지에도 최고라구. 
-        <br>입력은 <code>변수: 타입</code>으로 적고, 리턴 타입은 <code>-&gt; 타입</code> 형식으로 표시해!</p>
+        <p>요즘 파이썬에서는 입력과 출력의 <strong>형태(타입)를 미리 적어주는(Type Hint)</strong> 것이 권장됩니다! 코드를 읽기도 편해지고, AI 자동완성이나 에러 방지에도 매우 유용합니다. 
+        <br>입력은 <code>변수: 타입</code>으로 적고, 리턴 타입은 <code>-&gt; 타입</code> 형식으로 표시합니다.</p>
 
         <h2 id="section4">4. 함수 예시 (Python)</h2>
-        <p>두 숫자를 받아서 더한 뒤 돌려주는 깔끔한 파이썬 함수 예시야:</p>
+        <p>두 숫자를 받아서 더한 뒤 돌려주는 파이썬 함수 예시입니다:</p>
         
         <pre>
 <span style="color: #c678dd;">def</span> <span style="color: #61afef;">add_numbers</span>(a: <span style="color: #e5c07b;">int</span>, b: <span style="color: #e5c07b;">int</span>) <span style="color: #c678dd;">-&gt;</span> <span style="color: #e5c07b;">int</span>:
@@ -50,11 +50,11 @@
 
 <span style="color: #7f848e; font-style: italic;"># 함수 사용해보기</span>
 my_sum = add_numbers(<span style="color: #d19a66;">10</span>, <span style="color: #d19a66;">20</span>)
-<span style="color: #56b6c2;">print</span>(<span style="color: #98c379;">f"두 숫자의 합은 {my_sum} 이다무새!"</span>)
+<span style="color: #56b6c2;">print</span>(<span style="color: #98c379;">f"두 숫자의 합은 {my_sum} 입니다!"</span>)
 </pre>
 
         <h2 id="section5" style="margin-top: 2rem;">5. 파이썬 내장함수 (Built-in Functions)</h2>
-        <p>파이썬이 기본적으로 제공해주는 아주 유용한 함수들이야. 별도로 만들 필요 없이 바로 가져다 쓰면 된다무새!</p>
+        <p>파이썬이 기본적으로 제공해주는 아주 유용한 함수들입니다. 별도로 만들 필요 없이 바로 가져다 쓰시면 됩니다.</p>
         <table>
             <thead>
                 <tr>
@@ -99,17 +99,17 @@ my_sum = add_numbers(<span style="color: #d19a66;">10</span>, <span style="color
 
         <div class="tip-box" style="background-color: #f0fdf4; border-left: 4px solid #22c55e; padding: 1rem; margin-top: 1rem; border-radius: 4px;">
             <strong>💡 AI 모델링 최적화 팁: <code>round()</code> 내장함수로 연산 자원 절약하기!</strong><br>
-            AI 모델을 학습시키거나 대용량 센서 데이터를 전처리할 때, 소수점 아래 10자리까지 내려가는 세밀한 데이터(예: <code>24.51239845</code>)는 메모리와 연산 속도를 엄청나게 갉아먹는다무새! 데이터 입력 전에 <code>round()</code> 함수를 이용해 필요한 자릿수(예: <code>round(value, 3)</code>)까지만 남기고 반올림해주면, 불필요한 연산 오버헤드를 막고 AI 학습 속도를 획기적으로 올릴 수 있어!
+            AI 모델을 학습시키거나 대용량 센서 데이터를 전처리할 때, 소수점 아래 10자리까지 내려가는 세밀한 데이터(예: <code>24.51239845</code>)는 메모리와 연산 속도를 크게 저하시킵니다. 데이터 입력 전에 <code>round()</code> 함수를 이용해 필요한 자릿수(예: <code>round(value, 3)</code>)까지만 남기고 반올림해주면, 불필요한 연산 오버헤드를 막고 AI 학습 속도를 획기적으로 올릴 수 있습니다!
         </div>
 
         <h2 id="section6" style="margin-top: 2rem;">6. 포스코퓨처엠 실무: 각 부서별 파이썬 함수 활용 사례</h2>
-        <p>포스코퓨처엠의 다양한 부서에서 파이썬 함수 하나로 어떻게 업무를 자동화하고 혁신(DX)하는지 살펴보자무새!</p>
+        <p>포스코퓨처엠의 다양한 부서에서 파이썬 함수 하나로 어떻게 업무를 자동화하고 혁신(DX)하는지 살펴보겠습니다.</p>
         <ul>
-            <li><strong>[안전보건기획그룹 / 포항노재기술안전섹션] 헬스케어 & 유해가스 자동 모니터링:</strong> 작업장 내 실시간 유해가스 농도나 스마트 워치 바이오 데이터를 체크하는 <code>def check_safety_alert(sensor_data)</code> 함수를 만들어두면, 위험 수치 도달 시 즉시 사이렌을 울려 안전사고를 완벽히 예방할 수 있어!</li>
-            <li><strong>[실리콘음극재개발그룹 / FullCell평가섹션] R&D 데이터 일괄 분석:</strong> 수백 번씩 반복되는 배터리 충·방전(Full Cell) 사이클 테스트 결과를 분석할 때, 데이터 전처리와 성능 저하 곡선(Degradation Curve)을 그리는 과정을 함수 하나로 묶어두면 연구원들의 엑셀 작업 시간이 획기적으로 줄어든다구!</li>
-            <li><strong>[내화물정비섹션] 노후 설비 예지보전 (Predictive Maintenance):</strong> 내화물 설비의 온도 분포 변화나 균열 데이터를 받아 <code>def predict_maintenance_time()</code> 함수를 돌리면, 최적의 유지보수 및 교체 시기를 자동으로 계산해 줘서 돌발 고장을 막아준다무새.</li>
-            <li><strong>[인사문화그룹 / 내화물마케팅그룹] 부서별 데이터 취합 및 대시보드 자동화:</strong> 수천 명의 임직원 교육 이수율이나, 글로벌 내화물 고객사별 판매 실적 데이터를 함수에 넣기만 하면 대시보드 업데이트용 통계가 1초 만에 완성!</li>
-            <li><strong>[DX추진반 / 디지털혁신그룹 / 기술기획그룹] 전사적 RPA(업무 자동화) 표준화:</strong> 각 부서에서 반복적으로 수행하는 엑셀 취합이나 보고서 작성 업무를 파이썬 함수로 규격화하여 전사 배포함으로써, 포스코퓨처엠의 수작업 제로(0)화를 리딩하고 있어 🚀</li>
+            <li><strong>[안전보건기획그룹 / 포항노재기술안전섹션] 헬스케어 & 유해가스 자동 모니터링:</strong> 작업장 내 실시간 유해가스 농도나 스마트 워치 바이오 데이터를 체크하는 <code>def check_safety_alert(sensor_data)</code> 함수를 만들어두면, 위험 수치 도달 시 즉시 사이렌을 울려 안전사고를 완벽히 예방할 수 있습니다.</li>
+            <li><strong>[실리콘음극재개발그룹 / FullCell평가섹션] R&D 데이터 일괄 분석:</strong> 수백 번씩 반복되는 배터리 충·방전(Full Cell) 사이클 테스트 결과를 분석할 때, 데이터 전처리와 성능 저하 곡선(Degradation Curve)을 그리는 과정을 함수 하나로 묶어두면 연구원들의 엑셀 작업 시간이 획기적으로 줄어듭니다.</li>
+            <li><strong>[내화물정비섹션] 노후 설비 예지보전 (Predictive Maintenance):</strong> 내화물 설비의 온도 분포 변화나 균열 데이터를 받아 <code>def predict_maintenance_time()</code> 함수를 돌리면, 최적의 유지보수 및 교체 시기를 자동으로 계산해 줘서 돌발 고장을 막아줍니다.</li>
+            <li><strong>[인사문화그룹 / 내화물마케팅그룹] 부서별 데이터 취합 및 대시보드 자동화:</strong> 수천 명의 임직원 교육 이수율이나, 글로벌 내화물 고객사별 판매 실적 데이터를 함수에 넣기만 하면 대시보드 업데이트용 통계가 1초 만에 완성됩니다.</li>
+            <li><strong>[DX추진반 / 디지털혁신그룹 / 기술기획그룹] 전사적 RPA(업무 자동화) 표준화:</strong> 각 부서에서 반복적으로 수행하는 엑셀 취합이나 보고서 작성 업무를 파이썬 함수로 규격화하여 전사 배포함으로써, 포스코퓨처엠의 수작업 제로(0)화를 리딩하고 있습니다. 🚀</li>
         </ul>
         
         <div class="text-center" style="margin-top: 3rem;">

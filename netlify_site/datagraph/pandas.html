@@ -77,7 +77,7 @@
         </header>
         
         <h2 id="section1">1. 데이터 그룹화 (Group By & Count)</h2>
-        <p>"Pandas의 진정한 강력함은 엑셀의 피벗테이블처럼 데이터를 쉽게 묶어서 통계를 내는 <code>groupby</code> 기능에 있다무새!"</p>
+        <p>"Pandas의 진정한 강력함은 엑셀의 피벗테이블처럼 데이터를 쉽게 묶어서 통계를 내는 <code>groupby</code> 기능에 있습니다!"</p>
         
         <ul>
             <li><strong><code>df.groupby('기준컬럼')</code>:</strong> 특정 컬럼의 데이터를 기준으로 그룹을 묶어줍니다.</li>
@@ -105,8 +105,8 @@ defect_counts = df.groupby(<span style="color: #98c379;">'라인'</span>)[<span 
 </pre>
 
         <h2 id="section2">2. 대용량 데이터 메모리 최적화 팁 (float64 ➔ float32)</h2>
-        <p>프로젝트를 하다보면 수백만 건의 센서 데이터를 다루게 될 텐데, Pandas는 기본적으로 실수를 <code>float64</code>(64비트)로 저장한다무새. 너무 무겁다!</p>
-        <p>정밀한 소수점 아래 15자리까지 필요한 게 아니라면, <code>float32</code>로 낮춰주기만 해도 <strong>메모리 사용량을 절반</strong>으로 줄일 수 있어!</p>
+        <p>프로젝트를 하다보면 수백만 건의 센서 데이터를 다루게 될 텐데, Pandas는 기본적으로 실수를 <code>float64</code>(64비트)로 저장합니다. 너무 무겁습니다!</p>
+        <p>정밀한 소수점 아래 15자리까지 필요한 게 아니라면, <code>float32</code>로 낮춰주기만 해도 <strong>메모리 사용량을 절반</strong>으로 줄일 수 있습니다!</p>
         <pre>
 <span style="color: #7f848e; font-style: italic;"># 기존 메모리 상태 (float64)</span>
 <span style="color: #56b6c2;">print</span>(df[<span style="color: #98c379;">'온도센서'</span>].dtype)  <span style="color: #7f848e; font-style: italic;"># 출력: float64</span>
@@ -114,7 +114,7 @@ defect_counts = df.groupby(<span style="color: #98c379;">'라인'</span>)[<span 
 <span style="color: #7f848e; font-style: italic;"># 메모리 다이어트! float32로 변환</span>
 df[<span style="color: #98c379;">'온도센서'</span>] = df[<span style="color: #98c379;">'온도센서'</span>].astype(<span style="color: #98c379;">'float32'</span>)
 </pre>
-        <p>특히 <strong>CNN(합성곱 신경망)</strong> 같은 딥러닝 모델에 이미지를 넣을 때, 입력 데이터를 미리 <code>float32</code>로 맞춰주면 GPU 메모리 초과(OOM)를 방지하고 연산 속도를 대폭 끌어올릴 수 있어무새!</p>
+        <p>특히 <strong>CNN(합성곱 신경망)</strong> 같은 딥러닝 모델에 이미지를 넣을 때, 입력 데이터를 미리 <code>float32</code>로 맞춰주면 GPU 메모리 초과(OOM)를 방지하고 연산 속도를 대폭 끌어올릴 수 있습니다!</p>
         <pre>
 <span style="color: #c678dd;">import</span> tensorflow <span style="color: #c678dd;">as</span> tf
 <span style="color: #c678dd;">from</span> tensorflow.keras <span style="color: #c678dd;">import</span> layers, models
