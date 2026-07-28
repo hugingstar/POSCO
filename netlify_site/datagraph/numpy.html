@@ -70,6 +70,19 @@ val = matrix[<span style="color: #d19a66;">0</span>, <span style="color: #d19a66
 <span style="color: #56b6c2;">print</span>(val)  <span style="color: #7f848e; font-style: italic;"># 출력: 20</span>
 </pre>
 
+        <h3>✨ 조건으로 데이터 고르기 (Boolean Indexing)</h3>
+        <p>조건식을 주어 <strong>원하는 데이터만 쏙쏙 골라내는</strong> 아주 강력한 기능이야! 데이터를 분석할 때 불필요한 노이즈를 제거하거나, 특정 조건에 맞는 데이터만 걸러낼 때 정말 많이 쓰이지무새!</p>
+        <pre>
+<span style="color: #c678dd;">import</span> numpy <span style="color: #c678dd;">as</span> np
+
+<span style="color: #7f848e; font-style: italic;"># 나이 데이터가 담긴 배열</span>
+ages = np.array([<span style="color: #d19a66;">15</span>, <span style="color: #d19a66;">22</span>, <span style="color: #d19a66;">18</span>, <span style="color: #d19a66;">30</span>, <span style="color: #d19a66;">12</span>, <span style="color: #d19a66;">25</span>])
+
+<span style="color: #7f848e; font-style: italic;"># 20살 이상인 데이터만 걸러내기</span>
+adults = ages[ages &gt;= <span style="color: #d19a66;">20</span>]
+<span style="color: #56b6c2;">print</span>(adults)  <span style="color: #7f848e; font-style: italic;"># 출력: [22 30 25]</span>
+</pre>
+
         <h2>3. Shape 가공 (Shape Manipulation)</h2>
         <p>데이터 분석과 AI 모델 설계 시 데이터의 구조(행과 열의 개수)인 <code>shape</code>를 변형하는 일이 정말 많아무새!</p>
         <ul>
@@ -92,6 +105,7 @@ flat_arr = arr_2d.flatten()
 
         <h2>🤖 AI와 데이터 분석에서 왜 필수일까?</h2>
         <ul>
+            <li><strong>조건으로 이상치(Outlier) 제거:</strong> 센서 데이터나 가격 데이터 중 터무니없이 튀는 값(이상치)이 들어가면 AI가 엉뚱하게 학습해버려! 조건부 인덱싱(<code>data[data &lt; limit]</code>)으로 이상치를 단 한 줄만에 싹 걸러내고 깨끗한 데이터만 모델에 넣는 것이 핵심이야.</li>
             <li><strong>이미지는 3D Tensor:</strong> 디지털 이미지는 결국 <code>[가로 픽셀, 세로 픽셀, 색상 채널(RGB)]</code> 구조의 3차원 배열이야. 이미지를 회전하거나 크기를 변경할 때 모두 Numpy 배열 가공이 기본이지!</li>
             <li><strong>AI 모델의 입출력 구조 일치:</strong> AI 딥러닝 모델은 데이터의 Shape에 아주 예민해. 모델이 <code>(Batch_size, 28, 28)</code> 모양의 이미지 입력을 원한다면, 내가 가진 데이터를 Numpy의 <code>reshape</code>를 이용해 완벽히 똑같은 모양으로 가공해서 넣어줘야 학습이 된다무새!</li>
         </ul>
