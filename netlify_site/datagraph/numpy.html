@@ -7,6 +7,16 @@
     <meta name="description" content="Numpy 다차원 배열(0D~3D) 개념, 인덱싱 및 Shape 가공 방법">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/png" href="../favicon.png">
+    <style>
+        .example-img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 1rem 0;
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -110,16 +120,20 @@ flat_arr = arr_2d.flatten()
             <li>
                 <strong>(1) 데이터 분석 단계 - 공정 센서 이상치(Outlier) 제거:</strong>
                 <br>양극재 소성(열처리) 공정에서 수집된 수만 개의 온도 데이터 중, 센서 통신 오류로 인해 튄 비정상 스파이크 값(예: 1500도 이상)을 <code>valid_temp = temp[temp &lt; 1500]</code> 한 줄로 깔끔하게 걷어냅니다. 노이즈 없는 깨끗한 데이터만이 정확한 수율 분석의 첫걸음입니다.
+                <img src="images/posco_outlier.png" alt="공정 센서 이상치 제거" class="example-img">
             </li>
             <li style="margin-top: 1rem;">
                 <strong>(2) AI 모델링 단계 - 고품질 데이터 선별 및 비전(Vision) 이미지 마스킹:</strong>
                 <br>음극재 표면 미세 결함을 탐지하는 비전 AI 모델을 훈련할 때 조건식이 두 가지로 활약합니다.
                 <br>첫째, 수십만 장의 이미지 중 스크래치 결함 특징이 뚜렷한 데이터만 골라낼 때 <code>defect_images = images[defect_score &gt;= 0.8]</code> 조건식을 통해 초기 학습 효율을 극대화합니다.
-                <br>둘째, <strong>비전 이미지 데이터 자체의 전처리(마스킹)</strong>입니다. 현미경 촬영 이미지(다차원 배열)에서 불필요한 어두운 배경 노이즈를 일괄적으로 까맣게 지우려면 <code>image[image &lt; 50] = 0</code> 한 줄의 코드로 픽셀 값을 조건부 제어할 수 있습니다.
+                <img src="images/posco_data_selection.png" alt="고품질 학습 데이터 선별" class="example-img">
+                둘째, <strong>비전 이미지 데이터 자체의 전처리(마스킹)</strong>입니다. 현미경 촬영 이미지(다차원 배열)에서 불필요한 어두운 배경 노이즈를 일괄적으로 까맣게 지우려면 <code>image[image &lt; 50] = 0</code> 한 줄의 코드로 픽셀 값을 조건부 제어할 수 있습니다.
+                <img src="images/posco_vision_masking.png" alt="비전 이미지 데이터 마스킹" class="example-img">
             </li>
             <li style="margin-top: 1rem;">
                 <strong>(3) AI 활용 및 적용 단계 - 실시간 수율 예측 및 자동 제어:</strong>
                 <br>학습이 끝난 수율 예측 AI 모델이 실시간 현장에 투입되었습니다. 공정 라인 중, AI가 예측한 향후 수율이 95% 미만으로 떨어질 위험이 있는 배치(Batch)만 즉시 찾아내려면 <code>danger_batch = batch[predicted_yield &lt; 95.0]</code> 조건식을 사용합니다. 이를 통해 골든타임 내에 공정 파라미터를 자동 조정하고 대규모 불량을 미리 예방할 수 있습니다.
+                <img src="images/posco_yield_alert.png" alt="실시간 수율 예측 및 자동 제어" class="example-img">
             </li>
         </ul>
         
