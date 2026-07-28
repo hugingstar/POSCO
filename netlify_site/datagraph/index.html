@@ -24,12 +24,14 @@
             // 노드(목차 아이템) 설정
             var nodes = new vis.DataSet([
                 { id: 1, label: '파이썬 함수', title: "AI에게 '이 작업 반복해서 처리해줘'라고 똑똑하게 지시하려면 꼭 필요해요!", font: {size: 22, color: '#000000', bold: true}, color: {background: '#dbeafe', border: '#000000'}, shape: 'box', margin: 15, borderWidth: 2, shadow: true, url: 'function.html' },
-                { id: 2, label: '파이썬 클래스', title: "AI에게 '복잡한 시스템 구조 짜줘'라고 명령할 때 완벽한 설계도가 됩니다!", font: {size: 22, color: '#000000', bold: true}, color: {background: '#fce7f3', border: '#000000'}, shape: 'box', margin: 15, borderWidth: 2, shadow: true, url: 'class.html' }
+                { id: 2, label: '파이썬 클래스', title: "AI에게 '복잡한 시스템 구조 짜줘'라고 명령할 때 완벽한 설계도가 됩니다!", font: {size: 22, color: '#000000', bold: true}, color: {background: '#fce7f3', border: '#000000'}, shape: 'box', margin: 15, borderWidth: 2, shadow: true, url: 'class.html' },
+                { id: 3, label: 'Numpy로 데이터 가공', title: "AI 모델이 이해할 수 있도록 데이터를 행렬이나 다차원 배열로 가공할 때 필수적입니다!", font: {size: 22, color: '#000000', bold: true}, color: {background: '#ffedd5', border: '#000000'}, shape: 'box', margin: 15, borderWidth: 2, shadow: true, url: 'numpy.html' }
             ]);
 
             // 간선(연결선) 설정
             var edges = new vis.DataSet([
-                { from: 1, to: 2, arrows: 'to', color: {color:'#000000', highlight: '#000000'}, width: 2 }
+                { from: 1, to: 2, arrows: 'to', color: {color:'#000000', highlight: '#000000'}, width: 2 },
+                { from: 1, to: 3, arrows: 'to', color: {color:'#000000', highlight: '#000000'}, width: 2 }
             ]);
 
             // 네트워크 생성
