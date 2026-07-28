@@ -3,21 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>껄무새의 파이썬 복습</title>
-    <meta name="description" content="AI 모델링 및 자동화를 위한 파이썬 핵심 데이터 구조 학습">
-    <link rel="stylesheet" href="styles.css">
+    <title>껄무새의 학습 목차</title>
+    <meta name="description" content="껄무새와 함께하는 파이썬 및 AI 학습 목차입니다.">
     <link rel="icon" type="image/png" href="favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            background: var(--bg-color);
+            background-image: radial-gradient(circle at top right, #1e293b, #0f172a);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            padding: 2rem;
+            margin-top: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .day-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .day-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.15);
+            background: rgba(30, 41, 59, 0.9);
+        }
+
+        .day-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .day-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>🦜 껄무새와 함께하는 파이썬 복습</h1>
-        <p class="text-center">"안녕! 난 껄무새야 껄껄! AI랑 자동화 짤 때 꼭 알아야 하는 파이썬 핵심 데이터 구조, 내가 아주 쉽고 친절하게 알려줄게무새!"</p>
-        <div class="nav-links">
-            <a href="list.html" class="card-link">리스트 (List)</a>
-            <a href="tuple.html" class="card-link">튜플 (Tuple)</a>
-            <a href="json.html" class="card-link">JSON</a>
-            <a href="set.html" class="card-link">집합 (Set)</a>
-            <a href="mindmap.html" class="card-link" style="grid-column: 1 / -1; background: rgba(56, 189, 248, 0.1); border-color: #38bdf8;">🚀 껄무새의 개발~배포 마인드맵</a>
+        <header>
+            <h1>🦜 껄무새의 학습 목차</h1>
+            <p class="subtitle">매일매일 추가되는 파이썬 및 AI 학습 자료 모음입니다.<br>원하는 일차를 선택해서 학습을 시작해보세요!</p>
+        </header>
+
+        <div class="days-grid">
+            <a href="day1" class="day-card">
+                <span class="day-title">Day 1 🚀</span>
+                <span class="day-desc">파이썬 핵심 데이터 구조 복습</span>
+            </a>
+            <!-- 앞으로 Day 3, Day 4를 여기에 추가할 수 있습니다. -->
+            <a href="day2" class="day-card">
+                <span class="day-title">Day 2 💻</span>
+                <span class="day-desc">Day 2의 새로운 학습 주제</span>
+            </a>
         </div>
     </div>
 </body>
