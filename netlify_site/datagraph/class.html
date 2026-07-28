@@ -9,19 +9,29 @@
     <link rel="icon" type="image/png" href="../favicon.png">
 </head>
 <body>
+    <!-- 우측 목차 네비게이션 -->
+    <nav class="toc">
+        <ul>
+            <li><a href="#section1">1. 클래스 구조</a></li>
+            <li><a href="#section2">2. 메소드와 생성자</a></li>
+            <li><a href="#section3">3. 상속</a></li>
+            <li><a href="#section4">4. 부서별 활용 사례 (아키텍처)</a></li>
+        </ul>
+    </nav>
+
     <div class="container">
         <header class="text-center">
             <h1>🦜 파이썬 클래스 (Class)</h1>
         </header>
         
-        <h2>클래스 구조 (Class Structure)</h2>
+        <h2 id="section1">1. 클래스 구조 (Class Structure)</h2>
         <p>"자주 사용하는 변수들과 함수(메소드)들을 하나의 커다란 <strong>설계도(틀)</strong>로 묶어놓은 것을 클래스라고 합니다! 흔히 붕어빵 틀에 비유합니다."</p>
         <ul>
             <li><strong>클래스(Class):</strong> 붕어빵 틀 (설계도)</li>
             <li><strong>객체/인스턴스(Object):</strong> 틀에서 찍어낸 실제 붕어빵 (결과물)</li>
         </ul>
 
-        <h2>메소드 (Methods)와 생성자 (<code>__init__</code>)</h2>
+        <h2 id="section2">2. 메소드 (Methods)와 생성자 (<code>__init__</code>)</h2>
         <p>클래스 안에 들어있는 함수를 <strong>메소드</strong>라고 부릅니다. 클래스가 만들어질 때 가장 먼저 자동으로 실행되는 특별한 메소드가 바로 생성자(<code>__init__</code>)입니다.</p>
         <ul>
             <li><code>self</code>: 자기 자신을 가리키는 파라미터입니다. 클래스 내부의 변수나 다른 메소드를 부를 때 꼭 붙여줘야 합니다!</li>
@@ -42,7 +52,7 @@ my_bird = Bird(<span style="color: #98c379;">"참새"</span>)
 my_bird.speak() <span style="color: #7f848e; font-style: italic;"># 참새가 짹짹 운다!</span>
 </pre>
 
-        <h2>상속 (Inheritance)</h2>
+        <h2 id="section3">3. 상속 (Inheritance)</h2>
         <p>이미 만들어둔 붕어빵 틀(부모 클래스)의 모든 기능을 그대로 물려받고, 거기에 새로운 기능만 살짝 추가해서 새로운 틀(자식 클래스)을 만드는 기능입니다!</p>
         
         <pre>
@@ -57,10 +67,48 @@ my_parrot = Parrot(<span style="color: #98c379;">"껄무새"</span>)
 my_parrot.speak() <span style="color: #7f848e; font-style: italic;"># 부모 클래스의 기능을 그대로 사용!</span>
 my_parrot.mimic(<span style="color: #98c379;">"파이썬 최고"</span>) <span style="color: #7f848e; font-style: italic;"># 자신만의 기능도 사용!</span>
 </pre>
+
+        <h2 id="section4" style="margin-top: 2rem;">4. 🏗️ 포스코퓨처엠 실무: 클래스를 활용한 아키텍처(Architecture) 설계</h2>
+        <p>파이썬 클래스는 단순한 코드 묶음을 넘어, <strong>복잡한 시스템을 체계적으로 설계(Architecture)</strong>하는 데 필수적인 역할을 합니다. 포스코퓨처엠의 각 부서에서 클래스를 어떻게 활용하는지 살펴볼까요?</p>
+        
+        <ul>
+            <li><strong>[안전보건기획그룹] 센서 통합 관리 아키텍처:</strong> 현장의 유해가스 센서, 온도 센서, 스마트워치 등 다양한 장비들은 각각 통신 방식이 다릅니다. 최상위 부모 클래스인 <code>Sensor</code>를 만들고, 이를 상속받는 <code>GasSensor</code>, <code>BioSensor</code> 자식 클래스들을 구현하면(상속), 수백 개의 장비 제어 코드를 하나의 통일된 구조로 깔끔하게 관리할 수 있습니다.</li>
+            <li><strong>[실리콘음극재개발그룹] R&D 테스트 장비 인터페이스:</strong> 배터리 Full Cell 충방전 테스터기마다 데이터 출력 포맷이 다를 때, <code>BaseTester</code>라는 표준 클래스를 정의합니다. 이후 새로운 장비가 도입되더라도 기존 분석 코드를 수정할 필요 없이, <code>BaseTester</code>를 상속받은 새 클래스만 추가하면 되어 유지보수성이 극대화됩니다(다형성).</li>
+            <li><strong>[내화물정비섹션] 예지보전(PdM) 모델 객체화:</strong> 수많은 내화물 설비의 노후화를 예측할 때, 설비 하나하나를 <code>Equipment</code>라는 객체(Instance)로 생성합니다. 각 객체가 스스로의 현재 온도, 가동 시간, 균열 상태 등을 변수(상태)로 기억하고, <code>predict_failure()</code> 메소드를 통해 자체적으로 고장 시점을 계산하게 설계하면 관리가 매우 직관적입니다.</li>
+            <li><strong>[DX추진반] 모듈형 RPA 봇 설계:</strong> 엑셀 취합, ERP 데이터 다운로드, 메일 발송 등 자주 쓰이는 자동화 기능들을 독립적인 클래스(모듈)로 분리합니다. 현업 부서에서는 블록 장난감을 조립하듯 이 클래스들을 불러와 원하는 RPA 봇을 빠르고 안전하게 찍어낼 수 있습니다.</li>
+        </ul>
+        
+        <div class="tip-box" style="background-color: #f0fdf4; border-left: 4px solid #22c55e; padding: 1rem; margin-top: 1.5rem; border-radius: 4px;">
+            <strong>💡 실무 팁: 처음부터 클래스를 완벽하게 설계하려고 하지 마세요!</strong><br>
+            현업에서는 요구사항이 계속 바뀝니다. 처음에는 간단한 함수들로 스크립트를 짜다가, 코드가 길어지고 비슷한 변수들이 계속 묶여 다닐 때 <strong>"아, 이걸 클래스로 묶으면 편하겠구나!"</strong> 하는 시점에 리팩토링(Refactoring)하는 것이 가장 실용적인 접근입니다.
+        </div>
         
         <div class="text-center" style="margin-top: 3rem;">
             <a href="index.html" class="back-btn">&larr; Day 1 목차로 돌아가기</a>
         </div>
     </div>
+
+    <!-- 스크롤에 따른 목차 하이라이트 스크립트 -->
+    <script>
+        const sections = document.querySelectorAll('h2[id]');
+        const navLinks = document.querySelectorAll('.toc a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
