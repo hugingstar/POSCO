@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/png" href="../favicon.png">
     <style>
+        html { scroll-behavior: smooth; }
         .example-img {
             width: 100%;
             max-width: 500px;
@@ -21,41 +22,45 @@
             top: 50%;
             transform: translateY(-50%);
             right: 20px;
-            width: 200px;
-            background: #ffffff;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border: 1px solid #e2e8f0;
+            width: 180px;
             z-index: 1000;
         }
         .toc h4 {
             margin-top: 0;
             margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-            color: #1e293b;
+            font-size: 0.9rem;
+            color: #94a3b8;
         }
         .toc ul {
             list-style: none;
             padding-left: 0;
             margin: 0;
+            border-left: 2px solid #e2e8f0;
         }
         .toc ul li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.2rem;
         }
         .toc ul ul {
-            padding-left: 1rem;
-            margin-top: 0.25rem;
+            padding-left: 0;
+            margin-top: 0.2rem;
             font-size: 0.9em;
         }
         .toc a {
+            display: block;
             text-decoration: none;
-            color: #3b82f6;
-            transition: color 0.2s;
+            color: #64748b;
+            padding: 0.2rem 0 0.2rem 1rem;
+            transition: all 0.2s ease;
+            border-left: 2px solid transparent;
+            margin-left: -2px;
         }
         .toc a:hover {
-            color: #2563eb;
-            text-decoration: underline;
+            color: #334155;
+        }
+        .toc a.active {
+            color: #f97316;
+            font-weight: bold;
+            border-left-color: #f97316;
         }
         @media (max-width: 1024px) {
             .toc {
@@ -200,5 +205,26 @@ flat_arr = arr_2d.flatten()
             <a href="index.html" class="back-btn">&larr; 목차로 돌아가기</a>
         </div>
     </div>
+    
+    <script>
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const headings = document.querySelectorAll('h2[id], h3[id]');
+            
+            headings.forEach(heading => {
+                const headingTop = heading.getBoundingClientRect().top;
+                if (headingTop < 150) {
+                    current = heading.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.toc a').forEach(a => {
+                a.classList.remove('active');
+                if (current && a.getAttribute('href') === '#' + current) {
+                    a.classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
