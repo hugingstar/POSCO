@@ -16,7 +16,12 @@
             <li><a href="#section2">2. 입력과 출력</a></li>
             <li><a href="#section3">3. 타입 지정</a></li>
             <li><a href="#section4">4. 함수 예시</a></li>
-            <li><a href="#section5">5. 파이썬 내장함수</a></li>
+            <li>
+                <a href="#section5">5. 파이썬 내장함수</a>
+                <ul>
+                    <li><a href="#section5-1">5-1. 기본 자료구조</a></li>
+                </ul>
+            </li>
             <li><a href="#section6">6. 부서별 활용 사례</a></li>
         </ul>
     </nav>
@@ -102,6 +107,45 @@ my_sum = add_numbers(<span style="color: #d19a66;">10</span>, <span style="color
             AI 모델을 학습시키거나 대용량 센서 데이터를 전처리할 때, 소수점 아래 10자리까지 내려가는 세밀한 데이터(예: <code>24.51239845</code>)는 메모리와 연산 속도를 크게 저하시킵니다. 데이터 입력 전에 <code>round()</code> 함수를 이용해 필요한 자릿수(예: <code>round(value, 3)</code>)까지만 남기고 반올림해주면, 불필요한 연산 오버헤드를 막고 AI 학습 속도를 획기적으로 올릴 수 있습니다!
         </div>
 
+        <h3 id="section5-1" style="margin-top: 2rem;">5-1. 파이썬 기본 자료구조</h3>
+        <p>함수의 매개변수나 반환값으로 여러 개의 데이터를 넘겨줄 때, 파이썬에서 제공하는 기본 자료구조를 활용하면 데이터를 아주 깔끔하게 관리할 수 있습니다.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>자료구조</th>
+                    <th>기호</th>
+                    <th>특징</th>
+                    <th>사용 예시</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>List (리스트)</strong></td>
+                    <td><code>[ ]</code></td>
+                    <td>순서가 있고, <strong>수정이 가능</strong>한 데이터 집합</td>
+                    <td><code>["양극재", "음극재", "전구체"]</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Tuple (튜플)</strong></td>
+                    <td><code>( )</code></td>
+                    <td>순서가 있지만, <strong>수정이 불가능</strong>한 데이터 집합 (읽기 전용)</td>
+                    <td><code>("위도", "경도")</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Dictionary (딕셔너리)</strong></td>
+                    <td><code>{ }</code></td>
+                    <td><strong>키(Key)와 값(Value)</strong> 쌍으로 이루어진 데이터 집합</td>
+                    <td><code>{"온도": 25.5, "압력": 1.2}</code></td>
+                </tr>
+                <tr>
+                    <td><strong>Set (세트)</strong></td>
+                    <td><code>{ }</code></td>
+                    <td>순서가 없고, <strong>중복을 허용하지 않는</strong> 데이터 집합</td>
+                    <td><code>{1, 2, 2, 3}</code> -&gt; <code>{1, 2, 3}</code></td>
+                </tr>
+            </tbody>
+        </table>
+
         <h2 id="section6" style="margin-top: 2rem;">6. 포스코퓨처엠 실무: 각 부서별 파이썬 함수 활용 사례</h2>
         <p>포스코퓨처엠의 다양한 부서에서 파이썬 함수 하나로 어떻게 업무를 자동화하고 혁신(DX)하는지 살펴보겠습니다.</p>
         <ul>
@@ -119,7 +163,7 @@ my_sum = add_numbers(<span style="color: #d19a66;">10</span>, <span style="color
 
     <!-- 스크롤에 따른 목차 하이라이트 스크립트 -->
     <script>
-        const sections = document.querySelectorAll('h2[id]');
+        const sections = document.querySelectorAll('h2[id], h3[id]');
         const navLinks = document.querySelectorAll('.toc a');
 
         window.addEventListener('scroll', () => {
