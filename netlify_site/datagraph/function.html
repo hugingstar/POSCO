@@ -41,10 +41,49 @@ my_sum = add_numbers(<span style="color: #d19a66;">10</span>, <span style="color
 <span style="color: #56b6c2;">print</span>(<span style="color: #98c379;">f"두 숫자의 합은 {my_sum} 이다무새!"</span>)
 </pre>
 
-        <h2>AI랑 자동화에서 왜 쓸까?</h2>
+        <h2 style="margin-top: 2rem;">파이썬 내장함수 (Built-in Functions)</h2>
+        <p>파이썬이 기본적으로 제공해주는 아주 유용한 함수들이야. 별도로 만들 필요 없이 바로 가져다 쓰면 된다무새!</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>내장함수</th>
+                    <th>설명</th>
+                    <th>사용 예시</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>print()</code></td>
+                    <td>데이터를 화면에 출력</td>
+                    <td><code>print("소성로 온도 정상")</code></td>
+                </tr>
+                <tr>
+                    <td><code>len()</code></td>
+                    <td>데이터의 길이나 개수를 반환</td>
+                    <td><code>len(sensor_data_list)</code></td>
+                </tr>
+                <tr>
+                    <td><code>type()</code></td>
+                    <td>데이터의 자료형(타입)을 확인</td>
+                    <td><code>type(temperature)</code></td>
+                </tr>
+                <tr>
+                    <td><code>sum()</code></td>
+                    <td>리스트 내 모든 숫자의 합을 계산</td>
+                    <td><code>sum([10.5, 11.2, 9.8])</code></td>
+                </tr>
+                <tr>
+                    <td><code>max() / min()</code></td>
+                    <td>최댓값 또는 최솟값을 찾음</td>
+                    <td><code>max(pressure_values)</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 style="margin-top: 2rem;">포스코퓨처엠 실무: AI와 자동화에서 왜 쓸까?</h2>
         <ul>
-            <li><strong>데이터 일괄 처리:</strong> AI 모델에 여러 장의 이미지를 넣기 전에 크기를 한 번에 줄이거나 전처리할 때 함수 하나로 다 해결한다무새.</li>
-            <li><strong>코드 재사용:</strong> 똑같은 작업을 엑셀 파일 100개에 적용해야 할 때, 코드를 100번 복붙하는 대신 <code>for</code>문과 함께 <strong>함수 한 번</strong> 호출하면 퇴근이 빨라진다구!</li>
+            <li><strong>센서 데이터 일괄 전처리:</strong> 양극재 소성로에서 1초마다 들어오는 수십만 개의 온도/압력 센서 데이터를 정제할 때, <code>def clean_sensor_data()</code> 함수 하나만 잘 만들어두면 새로운 설비 데이터가 들어와도 자동으로 이상치를 걸러낼 수 있다무새!</li>
+            <li><strong>코드 재사용으로 공정 검사 효율화:</strong> 음극재 표면 결함을 찾는 비전(Vision) AI 모델을 돌릴 때, 이미지 크기를 조절하고 정규화하는 코드를 함수로 묶어두면 수십 대의 검사 장비에서 똑같이 함수 한 번 호출로 뚝딱 해결된다구! (퇴근이 빨라진다무새 🚀)</li>
         </ul>
         
         <div class="text-center" style="margin-top: 3rem;">
