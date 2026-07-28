@@ -16,15 +16,74 @@
             margin: 1rem 0;
             display: block;
         }
+        .toc {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 20px;
+            width: 200px;
+            background: #ffffff;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            z-index: 1000;
+        }
+        .toc h4 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            color: #1e293b;
+        }
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+        .toc ul li {
+            margin-bottom: 0.5rem;
+        }
+        .toc ul ul {
+            padding-left: 1rem;
+            margin-top: 0.25rem;
+            font-size: 0.9em;
+        }
+        .toc a {
+            text-decoration: none;
+            color: #3b82f6;
+            transition: color 0.2s;
+        }
+        .toc a:hover {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+        @media (max-width: 1024px) {
+            .toc {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
+    <nav class="toc">
+        <h4>📌 목차</h4>
+        <ul>
+            <li><a href="#section1">1. 다차원 배열</a></li>
+            <li><a href="#section2">2. 인덱싱</a>
+                <ul>
+                    <li><a href="#section2-1">Boolean Indexing</a></li>
+                </ul>
+            </li>
+            <li><a href="#section3">3. Shape 가공</a></li>
+            <li><a href="#section4">포스코 실무 사례</a></li>
+        </ul>
+    </nav>
     <div class="container">
         <header class="text-center">
             <h1>🦜 Numpy로 데이터 가공</h1>
         </header>
         
-        <h2>1. 다차원 배열 (N-Dimensional Array)</h2>
+        <h2 id="section1">1. 다차원 배열 (N-Dimensional Array)</h2>
         <p>"Numpy의 핵심은 데이터를 격자 모양의 배열로 아주 빠르고 효율적으로 처리하는 거야 껄껄! 차원(Dimension)에 따라 부르는 이름이 다르다무새."</p>
         
         <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0; text-align: left;">
@@ -64,7 +123,7 @@
             </tbody>
         </table>
 
-        <h2>2. Numpy 인덱싱 (Indexing)</h2>
+        <h2 id="section2">2. Numpy 인덱싱 (Indexing)</h2>
         <p>각 차원의 위치(인덱스)를 사용해서 원하는 데이터를 콕 집어 가져오는 방법이야. <strong>행(Row)과 열(Column)</strong> 순서대로 접근하면 된다무새!</p>
         <pre>
 <span style="color: #c678dd;">import</span> numpy <span style="color: #c678dd;">as</span> np
@@ -80,7 +139,7 @@ val = matrix[<span style="color: #d19a66;">0</span>, <span style="color: #d19a66
 <span style="color: #56b6c2;">print</span>(val)  <span style="color: #7f848e; font-style: italic;"># 출력: 20</span>
 </pre>
 
-        <h3>✨ 조건으로 데이터 고르기 (Boolean Indexing)</h3>
+        <h3 id="section2-1">✨ 조건으로 데이터 고르기 (Boolean Indexing)</h3>
         <p>조건식을 주어 <strong>원하는 데이터만 쏙쏙 골라내는</strong> 아주 강력한 기능이야! 데이터를 분석할 때 불필요한 노이즈를 제거하거나, 특정 조건에 맞는 데이터만 걸러낼 때 정말 많이 쓰이지무새!</p>
         <pre>
 <span style="color: #c678dd;">import</span> numpy <span style="color: #c678dd;">as</span> np
@@ -93,7 +152,7 @@ adults = ages[ages &gt;= <span style="color: #d19a66;">20</span>]
 <span style="color: #56b6c2;">print</span>(adults)  <span style="color: #7f848e; font-style: italic;"># 출력: [22 30 25]</span>
 </pre>
 
-        <h2>3. Shape 가공 (Shape Manipulation)</h2>
+        <h2 id="section3">3. Shape 가공 (Shape Manipulation)</h2>
         <p>데이터 분석과 AI 모델 설계 시 데이터의 구조(행과 열의 개수)인 <code>shape</code>를 변형하는 일이 정말 많아무새!</p>
         <ul>
             <li><strong><code>.shape</code>:</strong> 현재 배열이 몇 행 몇 열인지 확인하는 속성</li>
@@ -113,7 +172,7 @@ flat_arr = arr_2d.flatten()
 <span style="color: #56b6c2;">print</span>(flat_arr)  <span style="color: #7f848e; font-style: italic;"># 출력: [1 2 3 4 5 6]</span>
 </pre>
 
-        <h2>🤖 포스코퓨처엠 실무: AI와 데이터 분석에서 왜 필수일까?</h2>
+        <h2 id="section4">🤖 포스코퓨처엠 실무: AI와 데이터 분석에서 왜 필수일까?</h2>
         <p>배터리 소재(양극재/음극재) 생산과 품질을 책임지는 포스코퓨처엠 현장에서는 Numpy 조건부 인덱싱이 다음과 같이 강력하게 쓰인다무새!</p>
         
         <ul>
