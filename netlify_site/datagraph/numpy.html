@@ -207,6 +207,8 @@ output = np.dot(X, W)
                 <img src="images/posco_data_selection.png" alt="고품질 학습 데이터 선별" class="example-img">
                 둘째, <strong>비전 이미지 데이터 자체의 전처리(마스킹)</strong>입니다. 현미경 촬영 이미지(다차원 배열)에서 불필요한 어두운 배경 노이즈를 일괄적으로 까맣게 지우려면 <code>image[image &lt; 50] = 0</code> 한 줄의 코드로 픽셀 값을 조건부 제어할 수 있습니다.
                 <img src="images/posco_vision_masking.png" alt="비전 이미지 데이터 마스킹" class="example-img">
+                셋째, <strong>AI 모델 입력용 데이터 평탄화(.flatten)</strong>입니다. 표면 결함을 판별하는 분류 모델이나 인공신경망은 보통 1차원(1D) 배열 형태를 입력으로 받습니다. 다차원의 2D 이미지를 <code>flat_image = image.flatten()</code>을 사용하여 1차원 배열로 일렬로 쫙 펴주는 작업이 필수적입니다. 앞서 배운 행렬 곱 연산을 수행하기 위한 모델링 첫 관문입니다!
+                <img src="images/posco_flatten.png" alt="비전 이미지 데이터 평탄화" class="example-img">
             </li>
             <li style="margin-top: 1rem;">
                 <strong>(3) AI 활용 및 적용 단계 - 실시간 수율 예측 및 자동 제어:</strong>
