@@ -191,29 +191,33 @@ output = np.dot(X, W)
 </pre>
         <p>위 코드처럼 <code>np.dot()</code>이나 <code>@</code> 기호를 사용하면 복잡한 수식 없이 한 줄로 깔끔하게 행렬 곱 연산을 해낼 수 있다무새!</p>
         
-        <h3 style="margin-top: 2rem;">🔥 [심화 예제] Shape 가공과 행렬 곱이 융합된 실전 RNN 클래스</h3>
+        <h3 style="margin-top: 2rem;">🔥 [참고사항] Shape 가공과 행렬 곱이 융합된 실전 RNN 클래스</h3>
         <p>시계열 데이터(예: 배터리 소성로 1분 단위 온도, 압력 센서값)를 예측하는 <strong>RNN(순환 신경망) 모델</strong>을 Numpy 클래스로 직접 짜보자! Shape 구조 파악과 행렬 곱 연산이 딥러닝 내부에서 어떻게 쓰이는지 한눈에 볼 수 있어.</p>
         <pre>
 <span style="color: #c678dd;">class</span> <span style="color: #e5c07b;">SimpleRNN</span>:
     <span style="color: #c678dd;">def</span> <span style="color: #61afef;">__init__</span>(<span style="color: #e06c75;">self</span>, input_size, hidden_size):
         <span style="color: #7f848e; font-style: italic;"># 모델 가중치 초기화</span>
-        <span style="color: #e06c75;">self</span>.W_xh = np.random.randn(input_size, hidden_size)  <span style="color: #7f848e; font-style: italic;"># 입력 데이터용 가중치 행렬</span>
-        <span style="color: #e06c75;">self</span>.W_hh = np.random.randn(hidden_size, hidden_size) <span style="color: #7f848e; font-style: italic;"># 이전 상태용 가중치 행렬</span>
+        <span style="color: #e06c75;">self</span>.W_xh = np.random.randn(input_size, hidden_size)  <span style="color: #7f848e; font-style: italic;"># Shape: (3, 5)</span>
+        <span style="color: #e06c75;">self</span>.W_hh = np.random.randn(hidden_size, hidden_size) <span style="color: #7f848e; font-style: italic;"># Shape: (5, 5)</span>
         
     <span style="color: #c678dd;">def</span> <span style="color: #61afef;">forward</span>(<span style="color: #e06c75;">self</span>, inputs):
-        <span style="color: #7f848e; font-style: italic;"># inputs의 Shape 확인: (데이터 수, 시계열 길이, 특성 수)</span>
-        <span style="color: #56b6c2;">print</span>(<span style="color: #98c379;">f"입력 데이터 Shape: {inputs.shape}"</span>)
-        
+        <span style="color: #7f848e; font-style: italic;"># inputs의 Shape: (batch_size=2, time_steps=4, input_size=3)</span>
         batch_size, time_steps, input_size = inputs.shape
-        hidden_state = np.zeros((batch_size, <span style="color: #e06c75;">self</span>.W_hh.shape[<span style="color: #d19a66;">0</span>])) <span style="color: #7f848e; font-style: italic;"># 초기 상태를 0으로 생성</span>
+        
+        <span style="color: #7f848e; font-style: italic;"># 초기 은닉 상태 생성 -&gt; Shape: (2, 5)</span>
+        hidden_state = np.zeros((batch_size, <span style="color: #e06c75;">self</span>.W_hh.shape[<span style="color: #d19a66;">0</span>]))
         
         <span style="color: #c678dd;">for</span> t <span style="color: #c678dd;">in</span> <span style="color: #56b6c2;">range</span>(time_steps):
-            <span style="color: #7f848e; font-style: italic;"># 1. Shape 가공: 특정 시간(t)의 데이터만 슬라이싱하여 뽑아냄 (batch_size, input_size)</span>
-            x_t = inputs[:, t, :]
+            <span style="color: #7f848e; font-style: italic;"># 1. Shape 가공: 특정 시간(t)의 데이터만 슬라이싱</span>
+            <span style="color: #7f848e; font-style: italic;"># 3차원(2, 4, 3) 데이터가 2차원(2, 3)으로 변환됨!</span>
+            x_t = inputs[:, t, :]  <span style="color: #7f848e; font-style: italic;"># Shape: (2, 3)</span>
             
-            <span style="color: #7f848e; font-style: italic;"># 2. 행렬 곱(Matrix Multiplication): 입력값 연산 + 이전 상태값 연산</span>
+            <span style="color: #7f848e; font-style: italic;"># 2. 행렬 곱(Matrix Multiplication) 연산</span>
+            <span style="color: #7f848e; font-style: italic;"># np.dot( (2,3), (3,5) ) -&gt; (2, 5)</span>
+            <span style="color: #7f848e; font-style: italic;"># np.dot( (2,5), (5,5) ) -&gt; (2, 5)</span>
             hidden_state = np.dot(x_t, <span style="color: #e06c75;">self</span>.W_xh) + np.dot(hidden_state, <span style="color: #e06c75;">self</span>.W_hh)
-            <span style="color: #7f848e; font-style: italic;"># (tanh 활성화 함수로 값 조절)</span>
+            
+            <span style="color: #7f848e; font-style: italic;"># 활성화 함수 적용 -&gt; Shape: (2, 5) 그대로 유지</span>
             hidden_state = np.tanh(hidden_state) 
             
         <span style="color: #c678dd;">return</span> hidden_state
@@ -221,11 +225,12 @@ output = np.dot(X, W)
 <span style="color: #7f848e; font-style: italic;"># 테스트 실행</span>
 rnn_model = SimpleRNN(input_size=<span style="color: #d19a66;">3</span>, hidden_size=<span style="color: #d19a66;">5</span>)
 
-<span style="color: #7f848e; font-style: italic;"># 가상 시계열 센서 데이터 생성: (배치크기 2, 시간 4번, 센서특성 3개)</span>
-<span style="color: #7f848e; font-style: italic;"># 3차원 데이터 (2, 4, 3) Shape 생성</span>
+<span style="color: #7f848e; font-style: italic;"># 가상 시계열 데이터 생성 (배치크기 2, 4초 동안 측정, 센서특성 3개)</span>
+<span style="color: #7f848e; font-style: italic;"># 입력 데이터 Shape: (2, 4, 3)</span>
 sensor_data = np.random.randn(<span style="color: #d19a66;">2</span>, <span style="color: #d19a66;">4</span>, <span style="color: #d19a66;">3</span>) 
+
+<span style="color: #7f848e; font-style: italic;"># 결과물 Shape: (2, 5)</span>
 final_state = rnn_model.forward(sensor_data)
-<span style="color: #56b6c2;">print</span>(<span style="color: #98c379;">"최종 출력 Shape:"</span>, final_state.shape)
 </pre>
 
         <h2 id="section5">🤖 포스코퓨처엠 실무: AI와 데이터 분석에서 왜 필수일까?</h2>
