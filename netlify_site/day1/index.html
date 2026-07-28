@@ -29,7 +29,7 @@
 
             // 간선(연결선) 설정
             var edges = new vis.DataSet([
-                { from: 1, to: 2, arrows: 'to', color: {color:'#94a3b8', highlight: '#0ea5e9'}, width: 2 }
+                { from: 1, to: 2, arrows: 'to', color: {color:'#000000', highlight: '#000000'}, width: 2 }
             ]);
 
             // 네트워크 생성
@@ -41,8 +41,9 @@
             var options = {
                 physics: {
                     barnesHut: {
-                        springLength: 150,
-                        springConstant: 0.04
+                        springLength: 300,
+                        springConstant: 0.04,
+                        avoidOverlap: 0.5
                     }
                 },
                 interaction: {
