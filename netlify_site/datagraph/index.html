@@ -12,7 +12,7 @@
     <div class="container graph-container">
         <header class="text-center" style="margin-bottom: 2rem;">
             <img src="../favicon.png" alt="껄무새" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem; box-shadow: 0 10px 20px rgba(0,0,0,0.05); border: 3px solid white;">
-            <h1 style="font-size: 2.2rem; margin-bottom: 0;">🦜 데이터 분석</h1>
+            <h1 style="font-size: 2.2rem; margin-bottom: 0;">🦜 AI 기반 데이터 분석</h1>
         </header>
         
         <p class="text-center" style="margin-bottom: 2rem;">"안녕하세요! 오늘은 파이썬의 기초인 <strong>함수와 클래스</strong>부터, 실무에서 쓰이는 <strong>데이터 분석과 가공 방법</strong>까지 모두 알아보겠습니다."</p>
@@ -26,7 +26,8 @@
                 { id: 1, label: '🚩 [시작점]\n파이썬 함수', title: "AI에게 '이 작업 반복해서 처리해줘'라고 똑똑하게 지시하려면 꼭 필요해요!", font: {size: 24, color: '#ffffff', bold: true}, color: {background: '#f97316', border: '#c2410c'}, shape: 'box', margin: 20, borderWidth: 4, shadow: true, url: 'function.html' },
                 { id: 2, label: '파이썬 클래스', title: "AI에게 '복잡한 시스템 구조 짜줘'라고 명령할 때 완벽한 설계도가 됩니다!", font: {size: 22, color: '#000000', bold: true}, color: {background: '#fce7f3', border: '#000000'}, shape: 'box', margin: 15, borderWidth: 2, shadow: true, url: 'class.html' },
                 { id: 3, label: 'Numpy로 데이터 가공', title: "AI 모델이 이해할 수 있도록 데이터를 행렬이나 다차원 배열로 가공할 때 필수적입니다!", font: {size: 22, color: '#000000', bold: true}, color: {background: '#ffedd5', border: '#000000'}, shape: 'box', margin: 15, borderWidth: 2, shadow: true, url: 'numpy.html' },
-                { id: 4, label: 'Pandas로 데이터 가공', title: "수많은 데이터를 그룹화하고 최적화하여 엑셀처럼 자유롭게 다룰 때 꼭 필요합니다!", font: {size: 22, color: '#000000', bold: true}, color: {background: '#dcfce7', border: '#000000'}, shape: 'box', margin: 15, borderWidth: 2, shadow: true, url: 'pandas.html' }
+                { id: 4, label: 'Pandas로 데이터 가공', title: "수많은 데이터를 그룹화하고 최적화하여 엑셀처럼 자유롭게 다룰 때 꼭 필요합니다!", font: {size: 22, color: '#000000', bold: true}, color: {background: '#dcfce7', border: '#000000'}, shape: 'box', margin: 15, borderWidth: 2, shadow: true, url: 'pandas.html' },
+                { id: 5, label: '데이터 통계 분석', title: "통계적 기법을 통해 데이터의 특성을 파악하고 의미있는 결론을 도출합니다!", font: {size: 22, color: '#000000', bold: true}, color: {background: '#e0e7ff', border: '#000000'}, shape: 'box', margin: 15, borderWidth: 2, shadow: true, url: 'dataanalysis.html' }
             ]);
 
             // 간선(연결선) 설정
@@ -36,7 +37,10 @@
                 { from: 1, to: 4, arrows: 'to', color: {color:'#000000', highlight: '#000000'}, width: 2 },
                 { from: 2, to: 3, arrows: 'to', color: {color:'#000000', highlight: '#000000'}, width: 2 },
                 { from: 2, to: 4, arrows: 'to', color: {color:'#000000', highlight: '#000000'}, width: 2 },
-                { from: 3, to: 4, arrows: 'to, from', color: {color:'#000000', highlight: '#000000'}, width: 2 }
+                { from: 3, to: 4, arrows: 'to, from', color: {color:'#000000', highlight: '#000000'}, width: 2 },
+                { from: 3, to: 5, arrows: 'to', color: {color:'#000000', highlight: '#000000'}, width: 2 },
+                { from: 4, to: 5, arrows: 'to', color: {color:'#000000', highlight: '#000000'}, width: 2 },
+                { from: 2, to: 5, arrows: 'to', color: {color:'#000000', highlight: '#000000'}, width: 2 }
             ]);
 
             // 네트워크 생성

@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터 통계 분석 - 껄무새 파이썬</title>
+    <meta name="description" content="데이터 통계 분석 및 머신러닝 데이터 전처리 파이프라인">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .tip-box {
+            background:#f1f5f9; padding:15px; border-radius:5px; margin-top:15px; margin-bottom: 25px; border-left: 4px solid #0ea5e9;
+        }
+        .tip-title {
+            margin:0; font-weight:bold; margin-bottom:8px;
+        }
+        .tip-list {
+            margin:0; padding-left:20px; font-size:0.95em; color:#333;
+        }
+        table.styled-table {
+            width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9em; box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+        table.styled-table thead tr {
+            background-color: #009879; color: #ffffff; text-align: left;
+        }
+        table.styled-table th, table.styled-table td {
+            padding: 12px 15px; border: 1px solid #ddd;
+        }
+        table.styled-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        table.styled-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="text-center">
+            <h1>📊 데이터 통계 분석 및 전처리 리포트</h1>
+        </header>
+        
+        <h2 id="section1">1. 머신러닝 데이터 전처리</h2>
+        <p>머신러닝 모델의 성능은 데이터의 질에 의해 좌우됩니다. 아무리 뛰어난 알고리즘도 쓰레기 데이터(Garbage)가 들어가면 쓰레기 결과(Garbage)를 내놓습니다. (Garbage In, Garbage Out)</p>
+        
+        <h3>1.1. 데이터 로드 관련 개념</h3>
+        <p>데이터 분석을 시작하기 위해서는 원시(Raw) 데이터를 메모리에 올리는 과정이 필요합니다. 텍스트 파일(CSV 등)을 로드할 때 가장 흔히 겪는 문제는 바로 <strong>문자열 인코딩(Encoding)</strong>입니다.</p>
+        
+        <div class="tip-box">
+            <p class="tip-title">💡 한글 인코딩 깨짐 방지 팁</p>
+            <ul class="tip-list">
+                <li style="margin-bottom:4px;"><strong>cp949 / euc-kr</strong>: 과거 윈도우나 한국의 오래된 엑셀 시스템에서 자주 사용하던 방식입니다. 데이터를 불러왔을 때 한글이 <code></code> 처럼 깨진다면 <code>encoding='cp949'</code>를 시도해 보세요.</li>
+                <li style="margin-bottom:4px;"><strong>utf-8</strong>: 웹과 현대 프로그래밍의 글로벌 표준입니다. 가급적 모든 데이터는 UTF-8로 다루는 것이 정신 건강에 좋습니다.</li>
+                <li><strong>utf-8-sig</strong>: 엑셀(Excel)에서 UTF-8 CSV 파일을 열었을 때 한글이 깨지는 것을 막기 위해 파일 맨 앞에 BOM(Byte Order Mark)을 추가한 포맷입니다. 데이터를 저장하거나 불러올 때 <code>encoding='utf-8-sig'</code>를 사용하면 파이썬과 엑셀 양쪽에서 완벽하게 호환됩니다.</li>
+            </ul>
+        </div>
+
+        <h2 id="section2">2. 데이터 분석 및 시각화</h2>
+        
+        <h3>2.1. 데이터 통계 분석 (Describe)</h3>
+        <p>데이터를 로드한 직후 가장 먼저 해야 할 일은 데이터의 기초 통계량(평균, 편차, 최솟값, 최댓값, 사분위수 등)을 확인하는 것입니다. 아래는 불러온 데이터의 요약 통계표입니다.</p>
+        
+        <div id="statsTableContainer" style="overflow-x: auto;"></div>
+
+        <div class="tip-box">
+            <p class="tip-title">💡 통계 분석(Describe)을 왜 해야 할까요?</p>
+            <ul class="tip-list">
+                <li style="margin-bottom:4px;"><strong>Count가 매칭되지 않는 상황</strong>: 위 표에서 <code>count</code> 값이 다른 컬럼에 비해 적은 컬럼이 있다면, <strong>결측치(Missing Value)</strong>가 숨어있다는 뜻입니다. 즉시 보간이나 제거 계획을 세워야 합니다.</li>
+                <li style="margin-bottom:4px;"><strong>Min / Max 의 극단성</strong>: <code>min</code>이나 <code>max</code> 값이 평균(Mean)이나 3사분위수(75%)와 상식 밖의 차이를 보인다면 <strong>이상치(Outlier)</strong>가 존재함을 시사합니다.</li>
+                <li><strong>Mean 과 Median 의 차이</strong>: 평균과 50%(중앙값)의 차이가 크다면, 데이터가 정규분포를 따르지 않고 한쪽으로 꼬리가 길게 늘어진 비대칭 분포(Skewed)를 가짐을 의미합니다.</li>
+            </ul>
+        </div>
+
+        <h3>2.2. 데이터 결측치 처리 (Missing Value Interpolation)</h3>
+        <p>결측치를 처리하는 방법은 단순히 행을 지우거나 평균으로 채우는 것부터, 시계열 트렌드에 맞춰 다항식으로 보간하는 방법까지 다양합니다. 아래 차트에서 각 방식의 곡선 차이를 확인해 보세요.</p>
+        
+        <div id="interpolationPlotContainer" style="margin-top:20px; width:100%; max-width:800px; margin: 15px auto; border-radius:8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); background: white;"></div>
+        
+        <div class="tip-box">
+            <p class="tip-title">💡 결측치 보간 기법 선택 시 조심해야 할 것들</p>
+            <ul class="tip-list">
+                <li style="margin-bottom:4px;"><strong>평균/중앙값 대체</strong>: 매우 안전하고 쉽지만, 시계열 데이터의 트렌드(상승/하락 흐름)를 완전히 파괴하여 직진하는 수평선을 만듭니다.</li>
+                <li style="margin-bottom:4px;"><strong>선형 보간 (Linear Interpolation)</strong>: 오직 '수분율' 자체의 <strong>시간 흐름</strong>만 봅니다. 결측치 발생 직전과 직후의 수분율을 단순히 1차원적인 직선으로 잇습니다. 만약 그 사이에 '소성온도'가 급변하여 수분율이 요동쳤어야 하는 물리적 상황이라도 이를 무시하고 지나가 버립니다.</li>
+                <li style="margin-bottom:4px;"><strong>선형회귀 보간 (Regression Imputation)</strong>: 시간이 아닌 <strong>변수 간의 인과관계</strong>를 활용합니다. 정상 구간에서 "소성온도가 변할 때 수분율이 얼마나 변하는지" 수학적 패턴을 학습한 뒤, 결측 구간의 '소성온도' 값을 대입하여 수분율을 추정합니다. 공정의 물리적 특성을 가장 잘 반영하지만, 현실의 미세한 노이즈를 무시하고 기계적인 1차 방정식 선 위에만 값을 올려버리는 단점이 있습니다.</li>
+                <li style="margin-bottom:4px;"><strong>2차 회귀 보간 (Quadratic Regression)</strong>: '소성온도'와 '수분율'의 관계가 단순한 직선이 아니라 포물선(가속/감속) 형태를 띤다고 가정합니다. 온도가 일정 수준을 넘어가면 수분율 증발이 둔화되거나 가속화되는 비선형적인 물리 현상을 반영할 수 있습니다.</li>
+                <li><strong>3차 회귀 보간 (Cubic Regression)</strong>: 소성온도에 따른 수분율 변화가 S자 곡선처럼 복잡한 굴곡을 가질 때 사용합니다. <strong>주의점(과적합)</strong>: 차수가 높아질수록 주어진 정상 데이터에는 완벽하게 들어맞지만, 소성온도가 조금만 새로운 값을 가져도 수분율 예측값이 우주로 솟구치거나 지하로 꺼지는 치명적인 과적합(Overfitting) 현상이 발생할 수 있습니다.</li>
+            </ul>
+        </div>
+
+        <h3>2.3. 데이터 이상치 탐지 (Outlier)</h3>
+        <p>통계적 이상치를 찾아내기 위해 주로 사분위수를 이용한 <strong>IQR(Interquartile Range)</strong> 기법을 사용합니다. 아래는 이상치를 제거하기 전(Before)과 후(After)의 분포 변화입니다.</p>
+        
+        <div id="histogramPlotContainer" style="margin-top:20px; width:100%; max-width:800px; margin: 15px auto; border-radius:8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); background: white;"></div>
+        
+        <div class="tip-box">
+            <p class="tip-title">💡 이상치를 함부로 지우면 안 되는 상황</p>
+            <ul class="tip-list">
+                <li style="margin-bottom:4px;">단순히 IQR 바깥에 있다고 무작정 삭제하면 치명적인 정보를 잃을 수 있습니다.</li>
+                <li style="margin-bottom:4px;"><strong>센서 오작동(Error) vs 진짜 불량(Defect)</strong>: 센서가 고장나서 순간적으로 -9999 가 찍힌 것이라면 지워야 하지만, 실제 설비가 과열되어 1000도가 찍힌 것이라면 <strong>불량을 예측하기 위한 가장 핵심적인 데이터</strong>이므로 절대 지우면 안 됩니다.</li>
+                <li>이상치를 제거하기 전에는 도메인 전문가(현장 엔지니어)와 이 수치가 <em>물리적으로 발생 가능한 수치인지</em> 논의하는 과정이 필수적입니다.</li>
+            </ul>
+        </div>
+
+        <h3>2.4. 원핫 인코딩 (One-Hot Encoding) & 데이터 추가</h3>
+        <p>머신러닝 모델은 문자열을 이해하지 못합니다. <code>설비호기 (A, B, C)</code>와 같은 범주형 데이터를 컴퓨터가 이해할 수 있도록 0과 1의 벡터로 풀어쓰는 과정이 원핫 인코딩입니다.</p>
+        
+        <div style="overflow-x: auto;">
+            <table class="styled-table">
+                <thead>
+                    <tr><th>원래 데이터 (설비호기)</th><th>설비호기_A</th><th>설비호기_B</th><th>설비호기_C</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>A</td><td>1</td><td>0</td><td>0</td></tr>
+                    <tr><td>B</td><td>0</td><td>1</td><td>0</td></tr>
+                    <tr><td>C</td><td>0</td><td>0</td><td>1</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tip-box">
+            <p class="tip-title">💡 데이터가 너무 늘어나는 문제점 (차원의 저주) 및 대안</p>
+            <ul class="tip-list">
+                <li style="margin-bottom:4px;"><strong>제품의 개별 LOT 번호</strong>나 <strong>수백 명의 작업자 사번</strong>처럼 범주(Category)의 종류가 수백, 수천 개에 달할 경우 원핫 인코딩을 하면 컬럼이 수천 개로 늘어납니다.</li>
+                <li style="margin-bottom:8px;">컬럼이 과도하게 많아지면 모델이 패턴을 찾지 못하는 <strong>차원의 저주(Curse of Dimensionality)</strong> 현상이 발생하며, 대부분이 0으로 채워진 희소 행렬(Sparse Matrix) 때문에 메모리가 폭발합니다. 이럴 땐 원핫 인코딩 대신 아래의 대안을 고려해야 합니다.</li>
+                <li style="margin-bottom:4px;"><strong>Label Encoding (라벨 인코딩)</strong>: 카테고리를 A=1, B=2, C=3 처럼 단순히 임의의 정수로 매핑합니다. 차원은 늘어나지 않지만, 모델이 1과 3 사이의 수치적 크기 차이를 서열이나 가중치로 오해할 수 있는 단점이 있습니다.</li>
+                <li style="margin-bottom:4px;"><strong>Target Encoding (타겟 인코딩)</strong>: 해당 범주가 가지는 '타겟(정답)'의 평균값으로 문자를 치환합니다. (예: A설비에서 생산된 제품들의 평균 불량률이 0.15라면 A를 0.15로 치환)</li>
+                <li><strong>Embedding (임베딩)</strong>: 범주형 데이터를 딥러닝 신경망을 통해 의미를 가지는 조밀한(Dense) 실수 벡터 공간에 배치하는 고급 기법입니다. 수만 개의 단어를 다루는 자연어 처리(NLP)나 추천 시스템에서 필수적으로 쓰입니다.</li>
+            </ul>
+        </div>
+
+        <h3>2.5. 최종 데이터 통계 분석 (Cleaned 전처리 완료 데이터)</h3>
+        <p>결측치가 채워지고, 이상치가 처리된 후의 최종 데이터(Cleaned Data) 통계입니다. 이 단계에서 <code>count</code>가 모두 동일해졌는지, 극단적인 값들이 사라졌는지 검토합니다.</p>
+        <div id="finalStatsTableContainer" style="overflow-x: auto;"></div>
+
+        <div class="tip-box">
+            <p class="tip-title">💡 초기 통계표(2.1) 대비 무엇이 달라졌을까요?</p>
+            <ul class="tip-list" id="finalTipList">
+                <li>데이터를 분석 중입니다...</li>
+            </ul>
+        </div>
+
+        <h3>2.6. 데이터 상관관계 (Correlation)</h3>
+        <p>변수들끼리 얼마나 서로 관련이 있는지(하나가 증가할 때 다른 하나도 증가하는지) 파악하는 히트맵입니다.</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:space-around; margin:15px 0;">
+            <div id="heatmapPearson" style="width:32%; min-width:250px; height:350px; box-shadow:0 4px 6px rgba(0,0,0,0.1); background:white;"></div>
+            <div id="heatmapSpearman" style="width:32%; min-width:250px; height:350px; box-shadow:0 4px 6px rgba(0,0,0,0.1); background:white;"></div>
+            <div id="heatmapKendall" style="width:32%; min-width:250px; height:350px; box-shadow:0 4px 6px rgba(0,0,0,0.1); background:white;"></div>
+        </div>
+        
+        <div class="tip-box">
+            <p class="tip-title">💡 상관계수 알고리즘 선택 기준 및 수치 해석 팁</p>
+            <ul class="tip-list">
+                <li style="margin-bottom:4px;"><strong>Pearson (피어슨)</strong>: 가장 널리 쓰이며, 두 변수가 <strong>선형적(직선)</strong> 비례 관계일 때 사용합니다. 정규분포를 따를 때 가장 정확합니다.</li>
+                <li style="margin-bottom:4px;"><strong>Spearman (스피어만)</strong>: 값의 크기 자체가 아니라 <strong>순위(Rank)</strong>를 매겨 상관관계를 구합니다. 비선형적인 관계나 이상치가 많을 때 적합합니다.</li>
+                <li style="margin-bottom:12px;"><strong>Kendall's tau (켄달 타우)</strong>: 스피어만과 비슷하게 순위 기반이지만, 데이터 샘플 크기가 매우 작거나 중복된 값(동률)이 많을 때 통계적으로 더 신뢰할 수 있습니다.</li>
+                
+                <li style="margin-bottom:4px; font-weight:bold; color:#0ea5e9;">[수치 해석 가이드 (절댓값 기준)]</li>
+                <li style="margin-bottom:4px;"><strong>0.7 ~ 1.0 (강한 상관관계)</strong>: 두 변수가 매우 강하게 묶여 있습니다. (예: 0.85가 나왔다면, A가 증가할 때 B도 무조건 강하게 비례해서 증가함을 뜻합니다.)</li>
+                <li style="margin-bottom:4px;"><strong>0.4 ~ 0.7 (중간 상관관계)</strong>: 뚜렷한 경향성이 존재합니다. 머신러닝 예측 모델에서 유의미한 핵심 변수(Feature)로 자주 선택됩니다. (예: 0.55가 나왔다면 추세가 분명히 보입니다.)</li>
+                <li><strong>0.0 ~ 0.3 (약한/없는 상관관계)</strong>: 거의 관계가 없습니다. (예: 0.12가 나왔다면, A와 B는 완전 독립적으로 무작위로 움직인다고 봐야 합니다.)</li>
+            </ul>
+        </div>
+
+        <h3>2.7. 데이터 인과관계 (Causality in Time Series)</h3>
+        <p>상관관계가 높다고 해서 반드시 원인과 결과(인과관계)인 것은 아닙니다. 예를 들어 여름에 아이스크림 판매량과 익사 사고율은 상관관계가 높지만(둘 다 기온 때문에 발생), 아이스크림이 익사를 유발하는 것은 아닙니다.</p>
+        
+        <div class="tip-box">
+            <p class="tip-title">💡 시계열 공정 데이터의 변수 구분 가이드</p>
+            <ul class="tip-list">
+                <li style="margin-bottom:4px;"><strong>타겟 변수 (Target, Y)</strong>: 우리가 최종적으로 예측하거나 맞추고 싶은 결과입니다. (예: 양품여부, 방전용량)</li>
+                <li style="margin-bottom:4px;"><strong>제어 변수 (Control, X)</strong>: 작업자나 시스템이 의도적으로 값을 조작하고 설정할 수 있는 변수입니다. 타겟을 원하는 방향으로 바꾸기 위해 조절합니다. (예: 소성온도 세팅값, 소성시간)</li>
+                <li><strong>입력 변수 (Input / Sensor, X)</strong>: 조작할 수는 없지만 공정 중에 자연스럽게 관측되거나 원재료에서 발생하여 결과에 영향을 미치는 변수입니다. (예: 원재료의 입도, 측정된 수분율)</li>
+            </ul>
+        </div>
+
+        <h3>2.8. 추가 검토: 시계열 데이터 특이성</h3>
+        <p>시간의 흐름에 따라 기록되는 시계열 데이터는 일반적인 테이블 데이터와 달리 시간축(Time Index) 자체의 무결성이 매우 중요합니다.</p>
+        
+        <div class="tip-box">
+            <p class="tip-title">💡 시계열 데이터 전처리 시 필수 검토 사항</p>
+            <ul class="tip-list">
+                <li style="margin-bottom:4px;"><strong>Time index 문제</strong>: 데이터 수집 주기가 불규칙하거나 중간에 누락된 초/분/시간이 없는지(Resampling 필요) 검토해야 합니다.</li>
+                <li style="margin-bottom:4px;"><strong>시간 지연 검토 (Time Lag)</strong>: <code>온도</code>를 올렸다고 즉시 <code>수분율</code>이 변하지 않습니다. 설비 특성상 10분 뒤에 수분이 증발한다면, 현재 온도는 10분 뒤의 수분율과 짝지어(Shift) 분석해야 인과관계가 맞습니다.</li>
+                <li><strong>시계열 데이터 인덱스 비매칭</strong>: 서로 다른 센서 A(1초 주기)와 센서 B(5초 주기)의 데이터 병합 시 타임스탬프가 엇갈립니다. 이럴 땐 Nearest, Forward Fill 등 적절한 정렬(Alignment) 기법을 고민해야 합니다.</li>
+            </ul>
+        </div>
+
+        <h2 id="section3">3. 마지막 정리 (파이프라인 요약)</h2>
+        <p>지금까지 살펴본 데이터 분석 및 전처리 과정을 하나의 플로우 차트로 정리하면 다음과 같습니다.</p>
+        
+        <div class="mermaid" style="text-align: center; margin: 30px 0; overflow-x: auto; max-width: 100%;">
+            graph TD
+                A[원시 데이터 로드<br>& 인코딩 확인] --> B[기초 통계 분석<br>Describe]
+                B --> C{결측치가<br>있는가?}
+                C -- Yes --> D[시계열 보간법/<br>대체법 적용]
+                C -- No --> E{이상치가<br>있는가?}
+                D --> E
+                E -- Yes --> F[도메인 검토 후<br>IQR 등으로 정제]
+                E -- No --> G[범주형 데이터<br>원핫 인코딩]
+                F --> G
+                G --> H[정제 완료<br>데이터 재검토]
+                H --> I[변수 간 상관관계<br>히트맵 분석]
+                I --> J[Time Lag 및 인과관계 고려하여<br>ML 모델링 돌입]
+                
+                style A fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
+                style J fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+        </div>
+        
+        <div class="text-center" style="margin-top: 3rem;">
+            <a href="index.html" class="back-btn">&larr; 데이터 분석 목차로 돌아가기</a>
+        </div>
+    </div>
+
+    <script>
+        let globalData = [];
+        let numericColumns = [];
+
+        document.addEventListener("DOMContentLoaded", function() {
+            loadLocalData();
+        });
+
+        function loadLocalData() {
+            Papa.parse("./data/batch_quality.csv", {
+                download: true,
+                header: true,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    globalData = results.data;
+                    processData();
+                },
+                error: function(err) {
+                    alert("데이터를 불러오는데 실패했습니다: " + err);
+                }
+            });
+        }
+
+        function processData() {
+            if (!globalData || globalData.length === 0) return;
+            let keys = Object.keys(globalData[0]);
+            numericColumns = keys.filter(k => {
+                let val = globalData.find(row => row[k] !== null && row[k] !== undefined && typeof row[k] !== 'string');
+                return val !== undefined;
+            });
+
+            renderStatsTable('statsTableContainer', globalData);
+            renderInterpolationPlot();
+            renderViolinAndHistogram();
+            renderFinalStats();
+            renderCorrelationHeatmap(getCleanedData());
+        }
+
+        function renderStatsTable(containerId, data) {
+            let html = '<table class="styled-table"><thead><tr><th>Stat</th>';
+            numericColumns.forEach(col => { html += '<th>' + col + '</th>'; });
+            html += '</tr></thead><tbody>';
+
+            let stats = ['count', 'mean', 'std', 'min', '25%', '50%', '75%', 'max'];
+            let calculated = {};
+
+            numericColumns.forEach(col => {
+                let values = data.map(d => d[col]).filter(v => v !== null && v !== undefined && !isNaN(v));
+                values.sort((a,b) => a-b);
+                let count = values.length;
+                let mean = count > 0 ? values.reduce((a,b)=>a+b,0)/count : 0;
+                let variance = count > 1 ? values.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / (count - 1) : 0;
+                let std = Math.sqrt(variance);
+                calculated[col] = { 
+                    count, mean, std, 
+                    min: count ? values[0] : 0, 
+                    q25: count ? values[Math.floor(count * 0.25)] : 0, 
+                    q50: count ? values[Math.floor(count * 0.5)] : 0, 
+                    q75: count ? values[Math.floor(count * 0.75)] : 0, 
+                    max: count ? values[count-1] : 0 
+                };
+            });
+
+            stats.forEach(stat => {
+                html += '<tr><td><strong>' + stat + '</strong></td>';
+                numericColumns.forEach(col => {
+                    let val = 0;
+                    if(stat === 'count') val = calculated[col].count;
+                    if(stat === 'mean') val = calculated[col].mean.toFixed(2);
+                    if(stat === 'std') val = calculated[col].std.toFixed(2);
+                    if(stat === 'min') val = calculated[col].min.toFixed(2);
+                    if(stat === '25%') val = calculated[col].q25.toFixed(2);
+                    if(stat === '50%') val = calculated[col].q50.toFixed(2);
+                    if(stat === '75%') val = calculated[col].q75.toFixed(2);
+                    if(stat === 'max') val = calculated[col].max.toFixed(2);
+                    html += '<td>' + val + '</td>';
+                });
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+            document.getElementById(containerId).innerHTML = html;
+        }
+
+        function renderInterpolationPlot() {
+            let targetCol = numericColumns.includes('수분율') ? '수분율' : numericColumns[0];
+            let otherCol = numericColumns.find(c => c !== targetCol) || numericColumns[0];
+            
+            let original = globalData.slice(0, 50).map(d => d[targetCol]);
+            let otherOriginal = globalData.slice(0, 50).map(d => d[otherCol]);
+            let missing = [...original];
+            
+            // Create gaps
+            for(let i = 10; i < 18; i++) missing[i] = null;
+            for(let i = 32; i < 40; i++) missing[i] = null;
+            
+            let x_axis = Array.from({length: missing.length}, (_, i) => i);
+            
+            // 1. Mean
+            let valid = missing.filter(v => v !== null);
+            let meanVal = valid.reduce((a,b)=>a+b,0)/valid.length;
+            let arr_mean = missing.map(v => v === null ? meanVal : v);
+            
+            // 2. Linear
+            let arr_lin = [...missing];
+            let lastValid = -1;
+            for(let i=0; i<arr_lin.length; i++) {
+                if(arr_lin[i] !== null) lastValid = i;
+                else if (lastValid !== -1) {
+                    let nextValid = -1;
+                    for(let j=i+1; j<arr_lin.length; j++) {
+                        if(arr_lin[j] !== null) { nextValid = j; break; }
+                    }
+                    if(nextValid !== -1) {
+                        let step = (arr_lin[nextValid] - arr_lin[lastValid]) / (nextValid - lastValid);
+                        arr_lin[i] = arr_lin[i-1] + step;
+                    } else {
+                        arr_lin[i] = arr_lin[i-1];
+                    }
+                }
+            }
+
+            // 3. Quadratic Regression Interpolation (Degree 2)
+            let arr_quad = [...missing];
+            let quadModel = computePolyRegression(otherOriginal, missing, 2);
+            for(let i=0; i<missing.length; i++) {
+                if (missing[i] === null) {
+                    if(otherOriginal[i] !== null && otherOriginal[i] !== undefined) {
+                        arr_quad[i] = quadModel.predict(otherOriginal[i]);
+                    } else {
+                        arr_quad[i] = arr_lin[i];
+                    }
+                }
+            }
+
+            // 4. Cubic Regression Interpolation (Degree 3)
+            let arr_cubic = [...missing];
+            let cubicModel = computePolyRegression(otherOriginal, missing, 3);
+            for(let i=0; i<missing.length; i++) {
+                if (missing[i] === null) {
+                    if(otherOriginal[i] !== null && otherOriginal[i] !== undefined) {
+                        arr_cubic[i] = cubicModel.predict(otherOriginal[i]);
+                    } else {
+                        arr_cubic[i] = arr_lin[i];
+                    }
+                }
+            }
+
+            // 5. Linear Regression Interpolation using otherCol (e.g. 소성온도)
+            let arr_lr = [...missing];
+            let lrModel = computeLinearRegression(otherOriginal, missing); // missing has nulls
+            for(let i=0; i<missing.length; i++) {
+                if (missing[i] === null) {
+                    if(otherOriginal[i] !== null && otherOriginal[i] !== undefined) {
+                        arr_lr[i] = lrModel.slope * otherOriginal[i] + lrModel.intercept;
+                    } else {
+                        arr_lr[i] = arr_lin[i]; // Fallback if otherCol is also missing
+                    }
+                }
+            }
+
+            let traces = [
+                { x: x_axis, y: missing, mode: 'lines+markers', name: '원본 데이터(결측)', line: {color: 'black', width:2}, connectgaps: false },
+                { x: x_axis, y: arr_mean, mode: 'lines', name: '평균값 보간', line: {color: 'deepskyblue', dash: 'dot'}, opacity: 0.6 },
+                { x: x_axis, y: arr_lin, mode: 'lines', name: '선형 보간 (1차)', line: {color: 'orange'} },
+                { x: x_axis, y: arr_quad, mode: 'lines', name: '2차 회귀 보간 (Quadratic)', line: {color: 'green'} },
+                { x: x_axis, y: arr_cubic, mode: 'lines', name: '3차 회귀 보간 (Cubic)', line: {color: 'purple'} },
+                { x: x_axis, y: arr_lr, mode: 'lines', name: '선형회귀 보간 (Regression)', line: {color: 'brown', dash: 'dashdot'} },
+                { x: x_axis, y: otherOriginal, mode: 'lines', name: '비교용 정상 데이터 (' + otherCol + ')', line: {color: 'gray', width: 2}, yaxis: 'y2' }
+            ];
+
+            let layout = { 
+                title: '다양한 결측치 보간 기법 비교', 
+                margin:{t:40, b:40, l:50, r:20}, 
+                hovermode: 'x unified',
+                height: 500, // 너무 크지 않게 전체 높이 500px로 제한
+                yaxis: {domain: [0.55, 1], title: targetCol},
+                yaxis2: {domain: [0, 0.45], title: otherCol},
+                xaxis: {title: 'Index'}
+            };
+            Plotly.newPlot('interpolationPlotContainer', traces, layout);
+        }
+
+        function renderViolinAndHistogram() {
+            let targetCol = numericColumns.includes('입도') ? '입도' : numericColumns[0];
+            let values = globalData.map(d => d[targetCol]).filter(v => v !== null && v !== undefined && !isNaN(v));
+            values.sort((a,b)=>a-b);
+            
+            let q25 = values[Math.floor(values.length * 0.25)];
+            let q75 = values[Math.floor(values.length * 0.75)];
+            let iqr = q75 - q25;
+            let lower = q25 - 1.5 * iqr;
+            let upper = q75 + 1.5 * iqr;
+            
+            let cleanValues = values.filter(v => v >= lower && v <= upper);
+
+            let trace_violin = {
+                type: 'violin',
+                x: values,
+                name: '바이올린 플롯',
+                box: { visible: true },
+                meanline: { visible: true },
+                fillcolor: 'lightcoral',
+                opacity: 0.6,
+                yaxis: 'y2'
+            };
+
+            let trace_hist_before = { type: 'histogram', x: values, name: 'Before (전체 데이터)', marker: { color: 'lightcoral' }, opacity: 0.5, yaxis: 'y1' };
+            let trace_hist_after = { type: 'histogram', x: cleanValues, name: 'After (이상치 제거)', marker: { color: 'lightblue' }, opacity: 0.8, yaxis: 'y1' };
+
+            let layout = {
+                title: '이상치(Outlier) 제거 전후 분포 비교 (Violin & Histogram)',
+                barmode: 'overlay',
+                margin: {t:60, b:40},
+                height: 600,
+                yaxis2: { domain: [0.65, 1], showticklabels: false, title: 'Violin' },
+                yaxis: { domain: [0, 0.55], title: '빈도수 (Count)' },
+                xaxis: { title: targetCol },
+                shapes: [
+                    { type: 'line', x0: lower, x1: lower, y0: 0, y1: 1, yref: 'paper', line: { color: 'red', width: 2, dash: 'dash' } },
+                    { type: 'line', x0: upper, x1: upper, y0: 0, y1: 1, yref: 'paper', line: { color: 'red', width: 2, dash: 'dash' } },
+                    { type: 'line', x0: q25, x1: q25, y0: 0, y1: 1, yref: 'paper', line: { color: 'green', width: 2, dash: 'dot' } },
+                    { type: 'line', x0: q75, x1: q75, y0: 0, y1: 1, yref: 'paper', line: { color: 'green', width: 2, dash: 'dot' } }
+                ],
+                annotations: [
+                    { x: lower, y: 1.05, xref: 'x', yref: 'paper', text: 'Lower Bound', showarrow: false, font: {color: 'red'} },
+                    { x: upper, y: 1.05, xref: 'x', yref: 'paper', text: 'Upper Bound', showarrow: false, font: {color: 'red'} },
+                    { x: q25, y: 1.05, xref: 'x', yref: 'paper', text: 'Q1 (25%)', showarrow: false, font: {color: 'green'} },
+                    { x: q75, y: 1.05, xref: 'x', yref: 'paper', text: 'Q3 (75%)', showarrow: false, font: {color: 'green'} }
+                ],
+                hovermode: 'x unified'
+            };
+            Plotly.newPlot('histogramPlotContainer', [trace_violin, trace_hist_before, trace_hist_after], layout);
+        }
+
+        function getCleanedData() {
+            let data = JSON.parse(JSON.stringify(globalData));
+            
+            numericColumns.forEach(col => {
+                let missingIndices = [];
+                for(let i=0; i<data.length; i++) {
+                    if (data[i][col] === null || data[i][col] === undefined || isNaN(data[i][col])) {
+                        missingIndices.push(i);
+                    }
+                }
+                missingIndices.forEach(i => {
+                    let prev = null, next = null, prevIdx = -1, nextIdx = -1;
+                    for(let k=i-1; k>=0; k--) if(data[k][col] !== null) { prev = data[k][col]; prevIdx = k; break; }
+                    for(let k=i+1; k<data.length; k++) if(data[k][col] !== null) { next = data[k][col]; nextIdx = k; break; }
+                    
+                    if(prev !== null && next !== null) data[i][col] = prev + (next - prev) * ((i - prevIdx) / (nextIdx - prevIdx));
+                    else if (prev !== null) data[i][col] = prev;
+                    else if (next !== null) data[i][col] = next;
+                    else data[i][col] = 0;
+                });
+            });
+
+            let targetCol = numericColumns.includes('입도') ? '입도' : numericColumns[0];
+            let values = data.map(d => d[targetCol]).filter(v => v !== null && v !== undefined && !isNaN(v));
+            values.sort((a,b)=>a-b);
+            let q25 = values[Math.floor(values.length * 0.25)];
+            let q75 = values[Math.floor(values.length * 0.75)];
+            let iqr = q75 - q25;
+            let lower = q25 - 1.5 * iqr;
+            let upper = q75 + 1.5 * iqr;
+            
+            return data.filter(d => {
+                let v = d[targetCol];
+                return v >= lower && v <= upper;
+            });
+        }
+
+        function renderFinalStats() {
+            let cleanedData = getCleanedData();
+            renderStatsTable('finalStatsTableContainer', cleanedData);
+
+            let targetCol = numericColumns.includes('입도') ? '입도' : numericColumns[0];
+            let getStat = (data, col) => {
+                let vals = data.map(d=>d[col]).filter(v => v !== null && v !== undefined && !isNaN(v));
+                if(vals.length === 0) return {count:0, mean:0, std:0, min:0, max:0};
+                let count = vals.length;
+                let mean = vals.reduce((a,b)=>a+b,0)/count;
+                let std = Math.sqrt(vals.reduce((a,b)=>a+Math.pow(b-mean,2),0)/(count-1||1));
+                let min = Math.min(...vals);
+                let max = Math.max(...vals);
+                return {count, mean, std, min, max};
+            };
+
+            let before = getStat(globalData, targetCol);
+            let after = getStat(cleanedData, targetCol);
+
+            let tipHtml = `
+                <li style="margin-bottom:4px;"><strong>Count (데이터 개수)</strong>: 
+                    '${targetCol}'의 유효 데이터 개수가 <strong>${before.count}개 ➔ ${after.count}개</strong>로 변경되었습니다. (결측치가 모두 보간되어 데이터가 채워졌으나, 마지막에 극단적 이상치 ${before.count - after.count}개가 제거되었습니다)
+                </li>
+                <li style="margin-bottom:4px;"><strong>Std (표준편차)</strong>: 
+                    양극단의 비정상적인 데이터가 잘려나가면서 데이터의 흩어짐(표준편차)이 <strong>${before.std.toFixed(2)} ➔ ${after.std.toFixed(2)}</strong>로 대폭 감소하여, 훨씬 안정적이고 신뢰할 수 있는 밀집된 분포를 갖게 되었습니다.
+                </li>
+                <li><strong>Mean (평균) 및 Min/Max</strong>: 
+                    최소/최대 범위가 <strong>[${before.min.toFixed(2)} ~ ${before.max.toFixed(2)}] ➔ [${after.min.toFixed(2)} ~ ${after.max.toFixed(2)}]</strong>로 좁혀졌습니다. 비정상적으로 크고 작았던 값들이 사라짐에 따라 평균값 역시 <strong>${before.mean.toFixed(2)} ➔ ${after.mean.toFixed(2)}</strong>로 약간 이동하여, 억지스러운 왜곡이 없는 현실적인 대푯값을 나타냅니다.
+                </li>
+            `;
+            document.getElementById('finalTipList').innerHTML = tipHtml;
+        }
+
+        function renderCorrelationHeatmap(data) {
+            if(numericColumns.length < 2) return;
+            
+            function buildMatrix(corrFunc) {
+                let matrix = [];
+                for(let i=0; i<numericColumns.length; i++) {
+                    let row = [];
+                    for(let j=0; j<numericColumns.length; j++) {
+                        row.push(corrFunc(data, numericColumns[i], numericColumns[j]));
+                    }
+                    matrix.push(row);
+                }
+                return matrix;
+            }
+
+            let mPearson = buildMatrix(pearsonCorrelation);
+            let mSpearman = buildMatrix(spearmanCorrelation);
+            let mKendall = buildMatrix(kendallTau);
+
+            function drawHeatmap(divId, title, matrix) {
+                let trace = {
+                    z: matrix,
+                    x: numericColumns,
+                    y: numericColumns,
+                    type: 'heatmap',
+                    colorscale: 'RdBu',
+                    zmin: -1, zmax: 1,
+                    showscale: false
+                };
+                let layout = {
+                    title: { text: title, font: {size: 14} },
+                    margin: {t:40, b:40, l:60, r:10},
+                    annotations: []
+                };
+                for (let i = 0; i < numericColumns.length; i++) {
+                    for (let j = 0; j < numericColumns.length; j++) {
+                        let val = matrix[i][j].toFixed(2);
+                        layout.annotations.push({
+                            x: numericColumns[j],
+                            y: numericColumns[i],
+                            text: val,
+                            font: { color: Math.abs(matrix[i][j]) > 0.5 ? 'white' : 'black', size: 10 },
+                            showarrow: false
+                        });
+                    }
+                }
+                Plotly.newPlot(divId, [trace], layout);
+            }
+
+            drawHeatmap('heatmapPearson', 'Pearson (선형)', mPearson);
+            drawHeatmap('heatmapSpearman', 'Spearman (순위)', mSpearman);
+            drawHeatmap('heatmapKendall', 'Kendall Tau (쌍)', mKendall);
+        }
+
+        function getValidPairs(data, col1, col2) {
+            let x = [], y = [];
+            for (let i = 0; i < data.length; i++) {
+                let v1 = parseFloat(data[i][col1]);
+                let v2 = parseFloat(data[i][col2]);
+                if (!isNaN(v1) && !isNaN(v2)) {
+                    x.push(v1);
+                    y.push(v2);
+                }
+            }
+            return {x, y};
+        }
+
+        function getRanks(arr) {
+            let sorted = arr.map((v, i) => ({v, i})).sort((a,b) => a.v - b.v);
+            let ranks = new Array(arr.length);
+            let i = 0;
+            while (i < sorted.length) {
+                let j = i;
+                while (j < sorted.length && sorted[j].v === sorted[i].v) {
+                    j++;
+                }
+                if (j === i) j++; // Safety fallback
+                
+                let rankSum = 0;
+                for (let k = i; k < j; k++) rankSum += (k + 1);
+                let avgRank = rankSum / (j - i);
+                for (let k = i; k < j; k++) ranks[sorted[k].i] = avgRank;
+                i = j;
+            }
+            return ranks;
+        }
+
+        function spearmanCorrelation(data, col1, col2) {
+            let {x, y} = getValidPairs(data, col1, col2);
+            if (x.length === 0) return 0;
+            
+            let xRanks = getRanks(x);
+            let yRanks = getRanks(y);
+            
+            let n = xRanks.length;
+            let sumX=0, sumY=0, sumXY=0, sumX2=0, sumY2=0;
+            for(let i=0; i<n; i++) {
+                sumX += xRanks[i]; sumY += yRanks[i]; sumXY += xRanks[i]*yRanks[i];
+                sumX2 += xRanks[i]*xRanks[i]; sumY2 += yRanks[i]*yRanks[i];
+            }
+            let num = (n*sumXY) - (sumX*sumY);
+            let den = Math.sqrt((n*sumX2 - sumX*sumX) * (n*sumY2 - sumY*sumY));
+            return den === 0 ? 0 : num/den;
+        }
+
+        function kendallTau(data, col1, col2) {
+            let {x, y} = getValidPairs(data, col1, col2);
+            let n = x.length;
+            if (n < 2) return 0;
+            let nc = 0, nd = 0, n1 = 0, n2 = 0;
+            for(let i=0; i<n-1; i++) {
+                for(let j=i+1; j<n; j++) {
+                    let dx = x[i] - x[j];
+                    let dy = y[i] - y[j];
+                    if (dx !== 0 && dy !== 0) {
+                        if ((dx > 0 && dy > 0) || (dx < 0 && dy < 0)) nc++;
+                        else nd++;
+                    }
+                    if (dx === 0 && dy !== 0) n1++;
+                    if (dy === 0 && dx !== 0) n2++;
+                }
+            }
+            let n0 = n * (n - 1) / 2;
+            let den = Math.sqrt((n0 - n1) * (n0 - n2));
+            return den === 0 ? 0 : (nc - nd) / den;
+        }
+
+        function pearsonCorrelation(data, col1, col2) {
+            let {x, y} = getValidPairs(data, col1, col2);
+            let n = x.length;
+            if (n === 0) return 0;
+            let sumX=0, sumY=0, sumXY=0, sumX2=0, sumY2=0;
+            for(let i=0; i<n; i++) {
+                sumX += x[i]; sumY += y[i]; sumXY += x[i]*y[i];
+                sumX2 += x[i]*x[i]; sumY2 += y[i]*y[i];
+            }
+            let num = (n*sumXY) - (sumX*sumY);
+            let den = Math.sqrt((n*sumX2 - sumX*sumX) * (n*sumY2 - sumY*sumY));
+            return den === 0 ? 0 : num/den;
+        }
+
+        function computeLinearRegression(x, y) {
+            let n = 0;
+            let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+            
+            for (let i = 0; i < x.length; i++) {
+                if (x[i] !== null && y[i] !== null && !isNaN(x[i]) && !isNaN(y[i])) {
+                    n++;
+                    sumX += x[i];
+                    sumY += y[i];
+                    sumXY += x[i] * y[i];
+                    sumXX += x[i] * x[i];
+                }
+            }
+            
+            if (n === 0 || (n * sumXX - sumX * sumX) === 0) return { slope: 0, intercept: 0 };
+            
+            let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+            let intercept = (sumY - slope * sumX) / n;
+            
+            return { slope, intercept };
+        }
+
+        // Gaussian elimination to solve linear equations
+        function solveGaussian(A, b) {
+            let n = b.length;
+            for (let i = 0; i < n; i++) {
+                let maxEl = Math.abs(A[i][i]);
+                let maxRow = i;
+                for (let k = i + 1; k < n; k++) {
+                    if (Math.abs(A[k][i]) > maxEl) {
+                        maxEl = Math.abs(A[k][i]);
+                        maxRow = k;
+                    }
+                }
+                for (let k = i; k < n; k++) {
+                    let tmp = A[maxRow][k];
+                    A[maxRow][k] = A[i][k];
+                    A[i][k] = tmp;
+                }
+                let tmpB = b[maxRow];
+                b[maxRow] = b[i];
+                b[i] = tmpB;
+                for (let k = i + 1; k < n; k++) {
+                    let c = -A[k][i] / A[i][i];
+                    for (let j = i; j < n; j++) {
+                        if (i === j) A[k][j] = 0;
+                        else A[k][j] += c * A[i][j];
+                    }
+                    b[k] += c * b[i];
+                }
+            }
+            let x = new Array(n).fill(0);
+            for (let i = n - 1; i >= 0; i--) {
+                x[i] = b[i] / A[i][i];
+                for (let k = i - 1; k >= 0; k--) {
+                    b[k] -= A[k][i] * x[i];
+                }
+            }
+            return x;
+        }
+
+        function computePolyRegression(xArr, yArr, degree) {
+            let validX = [], validY = [];
+            for (let i = 0; i < xArr.length; i++) {
+                if (xArr[i] !== null && yArr[i] !== null && !isNaN(xArr[i]) && !isNaN(yArr[i])) {
+                    validX.push(xArr[i]);
+                    validY.push(yArr[i]);
+                }
+            }
+            let n = validX.length;
+            if (n === 0) return { coeffs: [], meanX: 0, scaleX: 1, predict: () => 0 };
+            
+            let meanX = validX.reduce((a,b)=>a+b,0) / n;
+            let maxDiff = validX.reduce((max, val) => Math.max(max, Math.abs(val - meanX)), 0);
+            let scaleX = maxDiff > 0 ? maxDiff : 1;
+            let scaledX = validX.map(v => (v - meanX) / scaleX);
+            
+            let X_mat = [];
+            let Y_mat = [];
+            for (let i = 0; i <= degree; i++) {
+                X_mat[i] = [];
+                let sumY = 0;
+                for (let k = 0; k < n; k++) {
+                    sumY += validY[k] * Math.pow(scaledX[k], i);
+                }
+                Y_mat[i] = sumY;
+                for (let j = 0; j <= degree; j++) {
+                    let sumX = 0;
+                    for (let k = 0; k < n; k++) {
+                        sumX += Math.pow(scaledX[k], i + j);
+                    }
+                    X_mat[i][j] = sumX;
+                }
+            }
+            let coeffs = solveGaussian(X_mat, Y_mat);
+            
+            return {
+                coeffs: coeffs,
+                meanX: meanX,
+                scaleX: scaleX,
+                predict: function(x_val) {
+                    let sx = (x_val - this.meanX) / this.scaleX;
+                    let y_val = 0;
+                    for (let i = 0; i < this.coeffs.length; i++) {
+                        y_val += this.coeffs[i] * Math.pow(sx, i);
+                    }
+                    return y_val;
+                }
+            };
+        }
+    </script>
+</body>
+</html>

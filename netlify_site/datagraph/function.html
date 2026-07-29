@@ -7,6 +7,53 @@
     <meta name="description" content="파이썬 함수, 입력/출력 파라미터, 타입 힌트 설정 방법">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/png" href="../favicon.png">
+    <style>
+        html { scroll-behavior: smooth; }
+        .toc {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 30px;
+            width: 180px;
+            z-index: 1000;
+        }
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+            border-left: 2px solid #e2e8f0;
+        }
+        .toc ul li {
+            margin-bottom: 0.2rem;
+        }
+        .toc ul ul {
+            padding-left: 0;
+            margin-top: 0.2rem;
+            font-size: 0.9em;
+        }
+        .toc a {
+            display: block;
+            text-decoration: none;
+            color: #64748b;
+            padding: 0.2rem 0 0.2rem 1rem;
+            transition: all 0.2s ease;
+            border-left: 2px solid transparent;
+            margin-left: -2px;
+        }
+        .toc a:hover {
+            color: #334155;
+        }
+        .toc a.active {
+            color: #f97316;
+            font-weight: bold;
+            border-left-color: #f97316;
+        }
+        @media (max-width: 1250px) {
+            .toc {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- 우측 목차 네비게이션 -->
@@ -146,14 +193,11 @@ my_sum = add_numbers(<span style="color: #d19a66;">10</span>, <span style="color
             </tbody>
         </table>
 
-        <h2 id="section6" style="margin-top: 2rem;">6. 포스코퓨처엠 실무: 각 부서별 파이썬 함수 활용 사례</h2>
-        <p>포스코퓨처엠의 다양한 부서에서 파이썬 함수 하나로 어떻게 업무를 자동화하고 혁신(DX)하는지 살펴보겠습니다.</p>
+        <h2 id="section6" style="margin-top: 2rem;">6. 포스코퓨처엠 실무: 부서별 파이썬 함수 활용 사례</h2>
+        <p>파이썬의 가장 큰 장점은 반복되는 코드를 함수로 묶어 자동화할 수 있다는 것입니다. 포스코퓨처엠 실무에서 어떻게 활용되는지 살펴볼까요?</p>
         <ul>
-            <li><strong>[안전보건기획그룹 / 포항노재기술안전섹션] 헬스케어 & 유해가스 자동 모니터링:</strong> 작업장 내 실시간 유해가스 농도나 스마트 워치 바이오 데이터를 체크하는 <code>def check_safety_alert(sensor_data)</code> 함수를 만들어두면, 위험 수치 도달 시 즉시 사이렌을 울려 안전사고를 완벽히 예방할 수 있습니다.</li>
-            <li><strong>[실리콘음극재개발그룹 / FullCell평가섹션] R&D 데이터 일괄 분석:</strong> 수백 번씩 반복되는 배터리 충·방전(Full Cell) 사이클 테스트 결과를 분석할 때, 데이터 전처리와 성능 저하 곡선(Degradation Curve)을 그리는 과정을 함수 하나로 묶어두면 연구원들의 엑셀 작업 시간이 획기적으로 줄어듭니다.</li>
-            <li><strong>[내화물정비섹션] 노후 설비 예지보전 (Predictive Maintenance):</strong> 내화물 설비의 온도 분포 변화나 균열 데이터를 받아 <code>def predict_maintenance_time()</code> 함수를 돌리면, 최적의 유지보수 및 교체 시기를 자동으로 계산해 줘서 돌발 고장을 막아줍니다.</li>
-            <li><strong>[인사문화그룹 / 내화물마케팅그룹] 부서별 데이터 취합 및 대시보드 자동화:</strong> 수천 명의 임직원 교육 이수율이나, 글로벌 내화물 고객사별 판매 실적 데이터를 함수에 넣기만 하면 대시보드 업데이트용 통계가 1초 만에 완성됩니다.</li>
-            <li><strong>[DX추진반 / 디지털혁신그룹 / 기술기획그룹] 전사적 RPA(업무 자동화) 표준화:</strong> 각 부서에서 반복적으로 수행하는 엑셀 취합이나 보고서 작성 업무를 파이썬 함수로 규격화하여 전사 배포함으로써, 포스코퓨처엠의 수작업 제로(0)화를 리딩하고 있습니다. 🚀</li>
+            <li><strong>[인사문화그룹] 데이터 취합 함수화:</strong> 수천 명의 임직원 교육 이수율, 근태 데이터 등 반복적으로 취합해야 하는 인사 데이터를 <code>def aggregate_hr_data(raw_data)</code> 형태의 함수로 만들어 두면, 클릭 한 번으로 대시보드 통계가 1초 만에 완성됩니다.</li>
+            <li><strong>[내화물마케팅그룹] 판매 실적 통계 자동화:</strong> 글로벌 고객사별 내화물 판매 실적 및 환율 변동에 따른 이익률 계산 과정을 함수로 규격화해두면, 매달 실적 보고서를 작성하는 시간을 획기적으로 줄이고 데이터 오류를 방지할 수 있습니다.</li>
         </ul>
         
         <div class="text-center" style="margin-top: 3rem;">
